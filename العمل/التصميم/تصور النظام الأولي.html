@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#F5F1E6">
+<title>تكة — تصور النظام الأولي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+ --sea-900:#173F38;--sea-700:#286253;--paper:#F5F1E6;--chalk:#FFFEFA;
+ --apricot:#E99B54;--clay:#B95740;--sage:#DDE6D4;--muted:#52615C;
+ --line:#D8DED3;--quiet:#EFF2EA;--shadow:0 12px 30px rgba(28,57,48,.08);
+ --r-sm:10px;--r-md:16px;--r-lg:24px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--sea-900);font-family:"Noto Sans Arabic",Tahoma,sans-serif}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid #A85937;outline-offset:3px}
+.shell{max-width:1180px;margin:auto;padding:30px 22px 40px}
+.topline{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{width:44px;height:44px;border-radius:14px;background:var(--sea-900);display:grid;place-items:center}
+.brand-name{font-size:22px;font-weight:800;line-height:1.1}
+.brand-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.draft{font-size:12px;color:var(--sea-700);background:#E6ECE2;padding:8px 13px;border-radius:999px}
+.intro{max-width:760px;margin:0 auto 28px;text-align:center}
+.eyebrow{font-size:13px;font-weight:700;color:var(--sea-700)}
+h1{font-size:clamp(25px,4vw,38px);line-height:1.35;margin:8px 0 6px}
+.intro p{margin:0;color:var(--muted);line-height:1.8}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 390px;gap:42px;align-items:start;direction:ltr}
+.system-notes{direction:rtl;padding:14px 0}
+.system-notes h2{font-size:20px;margin:0 0 14px}
+.note{border-top:1px solid var(--line);padding:15px 0}
+.note h3{font-size:14px;margin:0 0 8px}
+.note p,.note li{font-size:13px;line-height:1.8;color:var(--muted);margin:0}
+.note ul{padding:0 18px 0 0;margin:5px 0}
+.swatches{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.swatch{font-size:11px;color:var(--muted);display:flex;align-items:center;gap:7px}
+.dot{width:18px;height:18px;border-radius:6px;border:1px solid rgba(0,0,0,.08);flex:0 0 auto}
+.device-wrap{direction:rtl;display:flex;justify-content:center}
+.device{width:390px;min-height:744px;border:8px solid #263D37;border-radius:38px;background:var(--chalk);box-shadow:0 28px 65px rgba(27,54,47,.18);overflow:hidden;position:relative}
+.status{height:28px;padding:5px 20px;display:flex;justify-content:space-between;font:11px Tahoma,sans-serif;color:#53645d}
+.appbar{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 14px;border-bottom:1px solid #EDF0E9}
+.appbar-brand{font-weight:800;font-size:17px;display:flex;align-items:center;gap:8px}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--sage);display:grid;place-items:center;color:var(--sea-900);font-weight:800}
+.header-action{border:0;background:transparent;color:var(--sea-700);font-size:12px;padding:8px}
+.screen{display:none;padding:18px 18px 20px;animation:appear .18s ease-out}
+.screen.active{display:block}
+@keyframes appear{from{opacity:.65;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;scroll-behavior:auto!important}}
+.welcome{display:flex;align-items:center;justify-content:space-between;margin:2px 0 14px}
+.welcome h2{font-size:20px;margin:0}
+.welcome p{font-size:12px;color:var(--muted);margin:3px 0 0}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:#F4EBDD;padding:7px 10px;font-size:11px;color:#784B27}
+.hero{background:var(--sea-900);color:white;border-radius:24px;padding:18px;position:relative;overflow:hidden;min-height:202px}
+.hero::after{content:"";position:absolute;width:150px;height:150px;border:1px solid rgba(255,255,255,.18);border-radius:50%;left:-30px;bottom:-78px}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.hero-label{font-size:12px;color:#D8E9D8}
+.hero h3{font-size:21px;line-height:1.4;margin:7px 0}
+.hero p{font-size:13px;color:#E1EBE4;margin:0;line-height:1.65;max-width:225px}
+.island-art{width:82px;height:72px;flex:0 0 auto}
+.primary{border:0;background:var(--apricot);color:#243B34;padding:12px 17px;border-radius:13px;font-weight:800;font-size:14px}
+.primary:hover{background:#F1AD6B}
+.hero .primary{margin-top:14px}
+.progress-line{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#DDE9E1;margin-top:14px}
+.progress-track{height:5px;background:rgba(255,255,255,.24);border-radius:99px;overflow:hidden;margin-top:7px}
+.progress-fill{height:100%;width:34%;background:#E9B76D;border-radius:99px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:20px 1px 10px}
+.section-head h3{font-size:15px;margin:0}
+.text-link{border:0;background:none;padding:4px;color:var(--sea-700);font-size:12px;font-weight:700}
+.route{display:flex;align-items:center;gap:8px;background:#F6F5EE;border-radius:17px;padding:13px 11px}
+.node{width:35px;height:35px;border-radius:50%;border:2px solid #CAD8C8;display:grid;place-items:center;color:#728276;font-weight:700;font-size:12px;background:#fff;flex:0 0 auto}
+.node.done{background:var(--sea-700);border-color:var(--sea-700);color:white}
+.node.now{background:#F3D19E;border-color:#D58B43;color:#63421D}
+.connector{height:2px;flex:1;background:#CBD5CA}
+.route-caption{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin:7px 5px}
+.think{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:17px;padding:12px;margin-top:13px}
+.think-icon{width:39px;height:39px;border-radius:12px;background:#F6E7D7;display:grid;place-items:center;color:#82522B;flex:0 0 auto}
+.think strong{font-size:13px}
+.think p{font-size:11px;color:var(--muted);margin:2px 0 0}
+.arrow{margin-right:auto;color:var(--sea-700);font-size:18px}
+.stop-link{display:block;margin:12px auto 0;border:0;background:transparent;color:var(--muted);font-size:12px;padding:7px}
+.screen-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.screen-title h2{font-size:19px;margin:0}
+.back{border:0;background:var(--quiet);border-radius:10px;padding:8px 11px;color:var(--sea-900);font-size:12px}
+.sample-banner{font-size:11px;color:#7C592E;background:#F8EDDD;border-radius:10px;padding:8px 10px;margin-bottom:13px}
+.instruction{font-size:18px;line-height:1.7;font-weight:700;margin:12px 0 14px}
+.play-area{min-height:190px;background:#F1F4EC;border:1px dashed #B9C8B9;border-radius:18px;display:grid;place-items:center;padding:14px;text-align:center}
+.paper-card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:20px 23px;min-width:135px;font-size:14px;font-weight:700}
+.hint-row{display:flex;gap:9px;margin-top:12px}
+.audio-button,.hint-button{border:1px solid var(--line);background:white;color:var(--sea-900);padding:10px 12px;border-radius:12px;font-size:12px}
+.hint-panel{display:none;background:#EEF2E9;color:#40584D;border-radius:12px;margin-top:10px;padding:11px;font-size:12px;line-height:1.7}
+.hint-panel.open{display:block}
+.bottom-actions{display:flex;gap:9px;margin-top:16px}
+.bottom-actions button{flex:1}
+.secondary{border:1px solid var(--line);background:white;color:var(--sea-900);padding:11px;border-radius:13px;font-weight:700}
+.parent-lead{background:#E8EFE4;border-radius:18px;padding:16px;margin-bottom:14px}
+.parent-lead strong{font-size:15px}
+.parent-lead p{font-size:12px;color:var(--muted);line-height:1.7;margin:6px 0 0}
+.state-list{display:grid;gap:9px}
+.state-card{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);background:#fff;border-radius:14px;padding:12px}
+.state-card strong{font-size:13px}
+.state-card small{display:block;font-size:11px;color:var(--muted);margin-top:3px}
+.state-tag{white-space:nowrap;font-size:10px;background:#EEF2E9;color:var(--sea-700);padding:6px 8px;border-radius:99px}
+.setting{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding:13px 1px;font-size:13px}
+.switch{width:45px;height:26px;border:0;border-radius:99px;background:var(--sea-700);padding:3px;display:flex;justify-content:flex-start}
+.switch span{width:20px;height:20px;background:#fff;border-radius:50%}
+.parent-note{font-size:11px;color:var(--muted);line-height:1.7;background:#F6F5EE;border-radius:12px;padding:11px;margin-top:12px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 16px 16px;border-top:1px solid #EDF0E9}
+.tab{border:1px solid transparent;border-radius:12px;background:#F3F4EE;padding:10px 6px;color:#52615C;font-size:12px;font-weight:700}
+.tab[aria-pressed="true"]{background:var(--sea-900);color:white}
+.toast{position:absolute;bottom:69px;right:50%;transform:translateX(50%);background:#1B453B;color:white;padding:9px 12px;border-radius:12px;font-size:11px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s}
+.toast.show{opacity:1}
+.component-list{display:flex;flex-wrap:wrap;gap:7px}
+.component-chip{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:6px 9px;background:#fff;color:#465850}
+.footer-note{font-size:11px;color:#6C7770;margin-top:22px;text-align:center}
+@media(max-width:850px){
+ .shell{padding:20px 14px}.workspace{grid-template-columns:1fr;gap:18px}
+ .device-wrap{grid-row:1}.system-notes{grid-row:2;padding:0 8px}
+ .device{width:min(390px,100%);min-height:720px}
+ .intro{margin-bottom:18px}
+}
+@media(max-width:420px){
+ .shell{padding:14px 8px}.device{border-width:5px;border-radius:28px;min-height:700px}
+ .screen{padding:15px 13px}.hero{padding:16px;min-height:195px}
+ .island-art{width:67px}.hero p{max-width:190px}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topline">
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg width="27" height="27" viewBox="0 0 32 32" fill="none">
+          <path d="M4 22.5c3.8-4.7 7.5-6.5 12-6.5s8.2 1.8 12 6.5" stroke="#F5F1E6" stroke-width="2.3" stroke-linecap="round"/>
+          <path d="M7 24.5c2.6-2.8 5.5-4.1 9-4.1s6.4 1.3 9 4.1" stroke="#E99B54" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="16" cy="9.5" r="4" fill="#E99B54"/>
+        </svg>
+      </div>
+      <div><div class="brand-name">تَكّة</div><div class="brand-sub">رحلة تعلم هادئة</div></div>
+    </div>
+    <span class="draft">تصور أولي · بيانات افتراضية</span>
+  </header>
+
+  <section class="intro">
+    <div class="eyebrow">نظام التجربة والواجهات · مسودة 0.1</div>
+    <h1>اكتشاف جديد، وعلى مهلك</h1>
+    <p>محطات واضحة، صوت اختياري، ونهاية مريحة. هذا نموذج للشكل والنظام؛ لا يعرض درساً أو مادة من المنهاج.</p>
+  </section>
+
+  <main class="workspace">
+    <aside class="system-notes" aria-label="مبادئ نظام التصميم">
+      <h2>كيف يبدو نظام تكة؟</h2>
+      <section class="note">
+        <h3>ألوان الرحلة</h3>
+        <div class="swatches">
+          <div class="swatch"><i class="dot" style="background:#173F38"></i>حبر البحر</div>
+          <div class="swatch"><i class="dot" style="background:#F5F1E6"></i>ورق دافئ</div>
+          <div class="swatch"><i class="dot" style="background:#E99B54"></i>مشمش</div>
+          <div class="swatch"><i class="dot" style="background:#286253"></i>أخضر الرحلة</div>
+          <div class="swatch"><i class="dot" style="background:#DDE6D4"></i>ورق زيتوني</div>
+          <div class="swatch"><i class="dot" style="background:#B95740"></i>طوبي هادئ</div>
+        </div>
+      </section>
+      <section class="note">
+        <h3>مكونات مشتركة، وطرق تعلم مختلفة</h3>
+        <p>نفس الشريط، التلميح، الصوت، والحفظ والخروج؛ لكن شكل النشاط يتغير حسب المهارة والمادة. لا نعرض مسارات أو دروساً غير منشورة.</p>
+        <div class="component-list" style="margin-top:10px">
+          <span class="component-chip">تكة اليوم</span><span class="component-chip">محطة</span>
+          <span class="component-chip">تلميح</span><span class="component-chip">اسمع / اكتم</span>
+          <span class="component-chip">نوقف هون</span><span class="component-chip">ملخص ولي الأمر</span>
+        </div>
+      </section>
+      <section class="note">
+        <h3>قرارات للراحة والثقة</h3>
+        <ul>
+          <li>لا عدّ تنازلي أو سلسلة أيام أو مقارنة أطفال.</li>
+          <li>التقدم محفوظ محلياً؛ لا بيانات طفل مرسلة للخارج في MVP.</li>
+          <li>إكمال المسار منفصل عن إتقان كل مهارة.</li>
+        </ul>
+      </section>
+      <section class="note">
+        <h3>الخطوة المنهجية</h3>
+        <p>نثبت شكل النظام ببيانات وهمية أولاً. بعد اعتماد التصميم وخريطة الصف الأول، ندخل عينة موثقة فقط؛ تبقى المواد التالية خارج هذا النموذج.</p>
+      </section>
+    </aside>
+
+    <section class="device-wrap" aria-label="معاينة واجهة الهاتف">
+      <div class="device">
+        <div class="status"><span>9:41</span><span>◌　▰　▮</span></div>
+        <header class="appbar">
+          <div class="appbar-brand"><span class="avatar" aria-hidden="true">ت</span><span>تَكّة</span></div>
+          <button class="header-action" data-view="parent" aria-label="مساحة ولي الأمر">ولي الأمر</button>
+        </header>
+
+        <section class="screen active" id="home" aria-labelledby="home-title">
+          <div class="welcome">
+            <div><h2 id="home-title">أهلًا بك</h2><p>رحلتك محفوظة على هذا الجهاز</p></div>
+            <span class="pill">رحلة تجريبية</span>
+          </div>
+          <article class="hero">
+            <div class="hero-top">
+              <div>
+                <span class="hero-label">محطتك التالية</span>
+                <h3>جزيرة النموذج</h3>
+                <p>مهمة شكلية لتجربة طريقة العرض والتفاعل.</p>
+              </div>
+              <svg class="island-art" viewBox="0 0 100 88" fill="none" aria-hidden="true">
+                <path d="M10 57c9-18 25-25 43-25 17 0 30 7 38 25-18 12-58 15-81 0Z" fill="#DDE6D4"/>
+                <path d="M25 57c8-10 18-15 29-15 13 0 22 5 31 15-12 8-47 9-60 0Z" fill="#9AB38D"/>
+                <path d="M53 25c8 0 14 7 14 15H39c0-8 6-15 14-15Z" fill="#E99B54"/>
+                <path d="M45 39h16l-2 14H47l-2-14Z" fill="#FFFEFA"/>
+                <path d="M47 52h12v5H47z" fill="#E99B54"/>
+                <circle cx="53" cy="20" r="4" fill="#F2C77F"/>
+              </svg>
+            </div>
+            <button class="primary" data-view="activity">ابدأ المحطة</button>
+            <div class="progress-line"><span>تقدم تجريبي</span><span>2 من 6</span></div>
+            <div class="progress-track"><div class="progress-fill"></div></div>
+          </article>
+          <div class="section-head"><h3>محطات الرحلة</h3><button class="text-link" data-view="activity">تابعي من هنا</button></div>
+          <div class="route" aria-label="مسار تجريبي من ثلاث محطات">
+            <div class="node done" aria-label="محطة تجريبية مكتملة">✓</div><div class="connector"></div>
+            <div class="node now" aria-label="المحطة الحالية">٢</div><div class="connector"></div>
+            <div class="node" aria-label="محطة لاحقة">٣</div>
+          </div>
+          <div class="route-caption"><span>بداية</span><span>أنتِ هنا</span><span>لاحقاً</span></div>
+          <button class="think" data-view="activity" style="width:100%;text-align:right">
+            <span class="think-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3a7 7 0 0 0-4 12.7c.8.6 1.2 1.2 1.3 2.3h5.4c.1-1.1.5-1.7 1.3-2.3A7 7 0 0 0 12 3Z" stroke="currentColor" stroke-width="1.8"/><path d="M9.5 21h5M9 18h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </span><span><strong>تكة تفكير</strong><p>مساحة اختيارية للاستكشاف</p></span><span class="arrow" aria-hidden="true">‹</span>
+          </button>
+          <button class="stop-link" data-toast="تقدّمك محفوظ. يمكنك التوقف والعودة متى شئت.">نوقف هون</button>
+        </section>
+
+        <section class="screen" id="activity" aria-labelledby="activity-title">
+          <div class="screen-title"><h2 id="activity-title">محطة تجريبية</h2><button class="back" data-view="home">حفظ وخروج</button></div>
+          <div class="sample-banner">عرض واجهة فقط · لا يمثل سؤالاً أو درساً منهجياً</div>
+          <button class="audio-button" id="audio" aria-pressed="false">◖ اسمع التعليمات</button>
+          <p class="instruction">المطلوب: نقل البطاقة إلى مساحة الرحلة.</p>
+          <div class="play-area"><div class="paper-card">بطاقة تجريبية</div></div>
+          <div class="hint-row"><button class="hint-button" id="hint">أحتاج تلميحاً</button><button class="hint-button" data-toast="يمكن سماع التعليمات أو قراءتها؛ الصوت اختياري.">طريقة أخرى</button></div>
+          <div class="hint-panel" id="hint-panel">هذا مثال لبطاقة التلميح. في الدرس الفعلي، يرتبط التلميح بالمهارة ومصدرها ويعطي خطوة مساعدة بلا لوم.</div>
+          <div class="bottom-actions"><button class="primary" data-toast="انتهت المحطة التجريبية. لا يتم حفظ تعلم حقيقي في هذا النموذج.">أكملت المحطة</button><button class="secondary" data-view="home">نوقف هون</button></div>
+        </section>
+
+        <section class="screen" id="parent" aria-labelledby="parent-title">
+          <div class="screen-title"><h2 id="parent-title">مساحة ولي الأمر</h2><button class="back" data-view="home">عودة</button></div>
+          <div class="sample-banner">ملخص توضيحي ببيانات افتراضية، وليس تقريراً لطفل</div>
+          <div class="parent-lead"><strong>كيف كانت المحاولة؟</strong><p>يصف التطبيق ما جُرّب وما ظهر باستقلال، ليقترح دعماً مناسباً بلا تصنيف أو مقارنة.</p></div>
+          <div class="state-list">
+            <div class="state-card"><span><strong>مهارة تجريبية أ</strong><small>جرّب النشاط</small></span><span class="state-tag">جرّب</span></div>
+            <div class="state-card"><span><strong>مهارة تجريبية ب</strong><small>أكمل بعد مساعدة</small></span><span class="state-tag">أكمل بمساعدة</span></div>
+          </div>
+          <div class="section-head"><h3>إعدادات الرحلة</h3></div>
+          <div class="setting"><span>قراءة التعليمات بالصوت</span><button class="switch" id="parent-audio" role="switch" aria-checked="true" aria-label="الصوت الاختياري"><span></span></button></div>
+          <div class="setting"><span>التقدم محفوظ على الجهاز</span><span class="state-tag">محلي</span></div>
+          <div class="parent-note">المسار يعرض المحتوى المنشور فقط. هذه الشاشة شكلية؛ لا تحتوي منهجاً أو بيانات حقيقية.</div>
+        </section>
+
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+        <nav class="tabs" aria-label="التنقل بين المعاينات">
+          <button class="tab" data-view="home" aria-pressed="true">رحلة الطفل</button>
+          <button class="tab" data-view="parent" aria-pressed="false">ولي الأمر</button>
+        </nav>
+      </div>
+    </section>
+  </main>
+  <p class="footer-note">تصور قابل للتعديل قبل إدخال المحتوى. لا يحتوي هذا الملف على كود التطبيق أو تخزين أو صوت حقيقي.</p>
+</div>
+<script>
+(function(){
+ const screens=Array.from(document.querySelectorAll(".screen"));
+ const tabs=Array.from(document.querySelectorAll(".tab"));
+ const toast=document.getElementById("toast");
+ let timer;
+ function showView(name){
+  screens.forEach(function(s){s.classList.toggle("active",s.id===name);});
+  tabs.forEach(function(t){t.setAttribute("aria-pressed",String(t.dataset.view===name));});
+ }
+ document.querySelectorAll("[data-view]").forEach(function(el){
+  el.addEventListener("click",function(){showView(el.dataset.view);});
+ });
+ function notify(text){
+  toast.textContent=text;toast.classList.add("show");
+  clearTimeout(timer);timer=setTimeout(function(){toast.classList.remove("show");},2400);
+ }
+ document.querySelectorAll("[data-toast]").forEach(function(el){
+  el.addEventListener("click",function(){notify(el.dataset.toast);});
+ });
+ var audio=document.getElementById("audio");
+ audio.addEventListener("click",function(){
+  var on=audio.getAttribute("aria-pressed")!=="true";
+  audio.setAttribute("aria-pressed",String(on));
+  audio.textContent=on?"◖ الصوت مفعّل (عرض فقط)":"◖ اسمع التعليمات";
+  notify(on?"في التطبيق الفعلي سيقرأ الصوت الاختياري النص الظاهر.":"الصوت متوقف؛ تبقى التعليمات مكتوبة.");
+ });
+ var hint=document.getElementById("hint"),panel=document.getElementById("hint-panel");
+ hint.addEventListener("click",function(){panel.classList.toggle("open");});
+ var sw=document.getElementById("parent-audio");
+ sw.addEventListener("click",function(){
+  var on=sw.getAttribute("aria-checked")!=="true";
+  sw.setAttribute("aria-checked",String(on));
+  sw.style.justifyContent=on?"flex-start":"flex-end";
+ });
+})();
+</script>
+</body>
+</html>
