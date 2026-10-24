@@ -1,0 +1,13 @@
+{
+  "name": "تكة — جزيرتك تكبر بما تتعلم",
+  "short_name": "تكة",
+  "description": "مغامرة تعلم هادئة للأطفال على جزيرة تكة.",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F5F1E6",
+  "theme_color": "#F5F1E6",
+  "icons": [{ "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
