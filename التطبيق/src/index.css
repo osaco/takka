@@ -1,0 +1,404 @@
+:root {
+  --paper: #f5f1e6;
+  --ink: #173f38;
+  --journey: #286253;
+  --apricot: #e99b54;
+  --gold: #f59e0b;
+  --gentle: #fb923c;
+  --card: #f8fafc;
+  --sky: #b8d4e3;
+  --sand: #e8d5b7;
+  --leaf: #7baf8b;
+  --fog: #d4dcc8;
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Tajawal', 'Readex Pro', 'Segoe UI', Tahoma, Arial, sans-serif;
+  line-height: 1.6;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root { min-height: 100dvh; }
+
+button {
+  font-family: inherit;
+  min-height: 56px;
+  min-width: 56px;
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  cursor: pointer;
+}
+
+button:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.takka-screen {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px 16px 32px;
+}
+
+.takka-title { font-size: 28px; font-weight: 700; margin: 8px 0; }
+.takka-section { font-size: 24px; font-weight: 600; margin: 16px 0 8px; }
+.takka-instruction { font-size: 20px; margin: 8px 0 16px; }
+.takka-hint {
+  font-size: 18px;
+  background: var(--card);
+  border: 2px dashed var(--apricot);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  margin: 12px 0;
+}
+
+.takka-btn-primary {
+  background: var(--journey);
+  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 14px 28px;
+  width: 100%;
+}
+
+.takka-btn-secondary {
+  background: var(--card);
+  color: var(--ink);
+  border-color: var(--ink);
+  font-size: 18px;
+  padding: 12px 20px;
+}
+
+.takka-card {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin: 12px 0;
+  box-shadow: 0 2px 8px rgb(23 63 56 / 0.08);
+}
+
+.takka-row { display: flex; gap: 12px; flex-wrap: wrap; }
+.takka-row > * { flex: 1 1 160px; }
+
+@keyframes takka-wiggle {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px) rotate(-1deg); }
+  75% { transform: translateX(6px) rotate(1deg); }
+}
+
+.takka-wiggle { animation: takka-wiggle 300ms ease-in-out; }
+
+@keyframes takka-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(245 158 11 / 0.5); }
+  50% { box-shadow: 0 0 24px 6px rgb(245 158 11 / 0.45); }
+}
+
+.takka-celebrate { animation: takka-glow 500ms ease-in-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .takka-wiggle, .takka-celebrate { animation: none; }
+  .takka-upgrade-burst { animation: none; opacity: 0; }
+}
+
+/* ---------------------------------------------------------------------------
+   تكة — أجزاء الواجهة
+   قاعدة ثابتة: لا أحمر صارخ، لا مؤقّت، لا عدّاد نقاط، لا قائمة متصدرين.
+   كل أهداف اللمس ≥ 56dp.
+   --------------------------------------------------------------------------- */
+
+html, body {
+  font-synthesis: none;
+  letter-spacing: 0;
+  font-feature-settings: 'kern', 'liga', 'calt', 'mark', 'mkmk';
+}
+
+.takka-app { min-height: 100dvh; }
+
+.takka-meta { font-size: 16px; color: rgb(23 63 56 / 0.75); margin: 4px 0; }
+.takka-subject-tag {
+  font-size: 14px;
+  background: var(--fog);
+  border-radius: 999px;
+  padding: 2px 10px;
+  white-space: nowrap;
+}
+.takka-source-note { font-size: 13px; opacity: 0.65; margin-top: 8px; }
+.takka-list { font-size: 16px; padding-inline-start: 20px; }
+.takka-list li { margin: 6px 0; }
+
+.takka-splash { display: grid; justify-items: center; gap: 12px; text-align: center; padding-top: 40px; }
+.takka-splash-icon { border-radius: 28px; }
+
+.takka-companion { display: block; margin: 16px auto 0; opacity: 0.95; }
+.takka-companion--map { margin-top: 8px; }
+
+.takka-notice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--card);
+  border-inline-start: 6px solid var(--gold);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-size: 17px;
+  margin: 12px 0;
+}
+.takka-notice-x {
+  margin-inline-start: auto;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.takka-map-head, .takka-session-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  justify-content: space-between;
+}
+.takka-map-head > div, .takka-session-head > div { flex: 1; }
+.takka-parent-btn, .takka-stop { width: auto; white-space: nowrap; }
+.takka-phase-label { font-size: 15px; font-weight: 700; color: var(--journey); margin: 0 0 6px; }
+
+.takka-island-list { display: grid; gap: 12px; margin-top: 16px; }
+.takka-island-card-head { display: flex; align-items: center; gap: 10px; justify-content: space-between; }
+.takka-quick { border: 2px solid var(--journey); }
+
+.takka-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.takka-chip {
+  background: var(--paper);
+  border-color: var(--fog);
+  border-width: 2px;
+  border-style: solid;
+  font-size: 18px;
+  padding: 10px 18px;
+  min-height: 56px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.takka-chip.is-selected { background: var(--journey); color: #fff; border-color: var(--journey); }
+.takka-chip:disabled { opacity: 0.5; }
+.takka-chip-note { font-size: 12px; opacity: 0.8; }
+
+.takka-profile-head { display: flex; gap: 12px; align-items: center; }
+
+.takka-skill-list { display: grid; gap: 12px; margin-top: 16px; }
+.takka-skill-card { margin: 0; }
+
+.takka-item { display: inline-flex; flex-direction: column; align-items: center; gap: 6px; }
+.takka-item-label { font-size: 17px; }
+.takka-numeral { font-size: 30px; font-weight: 700; line-height: 1.2; }
+
+.takka-targets, .takka-tray, .takka-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin: 12px 0;
+}
+.takka-drop, .takka-card-chip, .takka-option {
+  background: var(--card);
+  border: 3px dashed var(--fog);
+  border-radius: var(--radius-lg);
+  min-height: 112px;
+  min-width: 116px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.takka-card-chip, .takka-option { border-style: solid; border-color: var(--sand); }
+.takka-card-chip.is-selected, .takka-option.is-selected {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgb(245 158 11 / 0.25);
+}
+.takka-drop.is-placed { border-style: solid; border-color: var(--journey); background: #fff; }
+.takka-drop-mark { width: 56px; height: 56px; border-radius: 50%; background: var(--paper); }
+.takka-option.is-trying { border-color: var(--apricot); }
+.takka-options--inline { justify-content: flex-start; margin: 8px 0 0; }
+
+.takka-spoken {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--card);
+  border-radius: 999px;
+  padding: 8px 18px;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 8px 0;
+}
+.takka-spoken-label { font-size: 14px; font-weight: 400; color: var(--journey); }
+
+.takka-session-foot { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px; }
+.takka-session-foot > * { flex: 1 1 160px; }
+.takka-feedback { border-style: solid; border-color: var(--journey); background: #fff; }
+
+.takka-model-card, .takka-close-card, .takka-end-card { border: 2px solid var(--sand); }
+.takka-model-head { display: flex; gap: 12px; align-items: center; }
+.takka-model-answer { font-size: 20px; font-weight: 700; color: var(--journey); }
+
+.takka-trace-meter { margin-top: 12px; }
+.takka-trace-bar { height: 14px; background: var(--fog); border-radius: 999px; overflow: hidden; }
+.takka-trace-fill { height: 100%; background: var(--gold); transition: width 160ms linear; }
+
+.takka-balance-rig { display: grid; justify-items: center; margin: 8px 0 0; }
+.takka-balance-beam {
+  width: 260px;
+  height: 10px;
+  background: var(--ink);
+  border-radius: 999px;
+  position: relative;
+  transform-origin: center;
+}
+.takka-balance-hook { position: absolute; top: 6px; width: 3px; height: 18px; background: var(--ink); }
+.takka-balance-hook--right { right: 12px; }
+.takka-balance-hook--left { left: 12px; }
+.takka-balance-column { width: 12px; height: 46px; background: var(--sand); border: 3px solid var(--ink); border-radius: 6px; margin-top: -2px; }
+.takka-balance-pans { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; margin-top: 12px; }
+.takka-pan {
+  background: var(--paper);
+  border: 3px solid var(--sand);
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  min-height: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.takka-pan-items { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.takka-pan-total { font-size: 15px; color: rgb(23 63 56 / 0.7); }
+.takka-weight {
+  background: var(--card);
+  border: 3px solid var(--ink);
+  border-radius: var(--radius-md);
+  padding: 6px 14px;
+}
+.takka-weight.is-picked { border-color: var(--gold); }
+.takka-weight-btn {
+  background: var(--card);
+  border: 3px solid var(--sand);
+  min-width: 72px;
+  min-height: 56px;
+  font-size: 24px;
+}
+.takka-weight-btn.is-selected { border-color: var(--gold); background: #fff; }
+
+.takka-toggle { display: flex; align-items: center; gap: 10px; font-size: 18px; margin: 10px 0; min-height: 44px; }
+.takka-toggle input { width: 28px; height: 28px; }
+
+.takka-textarea {
+  width: 100%;
+  font-family: inherit;
+  font-size: 17px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--fog);
+  background: var(--paper);
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.takka-pack { border-top: 2px dashed var(--fog); padding-top: 10px; margin-top: 10px; }
+.takka-error { font-size: 13px; white-space: pre-wrap; direction: ltr; text-align: left; background: var(--paper); padding: 12px; border-radius: var(--radius-md); }
+
+@media (max-width: 480px) {
+  .takka-balance-pans { grid-template-columns: 1fr; }
+  .takka-title { font-size: 24px; }
+}
+
+/* ---------------------------------------------------------------------------
+   برج تكّة — مدخل الترقية، لوحتها، وتأثيرها اللطيف
+   --------------------------------------------------------------------------- */
+
+.takka-stage-wrap { position: relative; }
+
+.takka-upgrade-burst {
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  border: 4px solid var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: takka-burst 700ms ease-out forwards;
+}
+
+@keyframes takka-burst {
+  from { transform: scale(0.4); opacity: 0.9; }
+  to { transform: scale(3); opacity: 0; }
+}
+
+.takka-hq-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  border: 2px solid var(--sand);
+}
+.takka-hq-card .takka-section { margin: 0; }
+.takka-hq-card .takka-meta { margin: 4px 0 0; }
+.takka-hq-card > button { width: auto; flex: 0 0 auto; }
+
+.takka-hq-levels {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0 12px;
+}
+.takka-hq-level {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--journey);
+  background: transparent;
+}
+.takka-hq-level.is-filled { background: var(--gold); border-color: var(--gold); }
+.takka-hq-level-text { font-size: 16px; margin-inline-start: 4px; }
+
+.takka-cost-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 12px;
+  display: grid;
+  gap: 6px;
+}
+.takka-cost-list li {
+  display: flex;
+  justify-content: space-between;
+  background: var(--paper);
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 17px;
+}
+.takka-cost-list li.is-short { border-color: var(--apricot); }
+
+.takka-hq-message {
+  background: var(--paper);
+  border-inline-start: 4px solid var(--gold);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 16px;
+  margin: 8px 0 12px;
+}
+
+.takka-modal-actions { display: grid; gap: 8px; margin-top: 8px; }
+.takka-modal-actions > .takka-btn-secondary { width: 100%; }
+
+

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="باب">
+  <title>بَاب</title>
+  <path d="M24 108 V56 a36 36 0 0 1 72 0 V108 Z" fill="#E99B54" stroke="#173F38" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M38 108 V58 a22 22 0 0 1 44 0 V108 Z" fill="#F5F1E6" stroke="#173F38" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="72" cy="80" r="4" fill="#F59E0B" stroke="#173F38" stroke-width="2.5"/>
+  <path d="M60 36 V18 M52 24 h16" fill="none" stroke="#173F38" stroke-width="3" stroke-linecap="round"/>
+  <path d="M24 108 h72" stroke="#173F38" stroke-width="3" stroke-linecap="round"/>
+</svg>

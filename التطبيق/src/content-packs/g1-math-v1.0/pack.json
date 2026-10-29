@@ -1,0 +1,623 @@
+{
+  "manifest": {
+    "id": "g1-math-v1.0",
+    "grade": 1,
+    "subject": "math",
+    "version": "0.1.0",
+    "title": "الصف الأول — الرياضيات",
+    "edition": "رزم غزة 2024",
+    "publishedAt": "2026-10-20",
+    "auditStatus": "internal_reviewed",
+    "scopeNote": "عيّنة تأسيسية: 9 مهارات و9 أنشطة من أصل 46 درساً في رزمة رياضيات١كل المتمازجة غزة.pdf. ليست المنهاج الكامل، ولا تغطي الوحدتين الثالثة والرابعة كاملتين (بلا قيمة منزلية، بلا جمع أو طرح ضمن 18، بلا الأعداد 20–99).",
+    "coverage": {
+      "declared": "9 مهارات و9 أنشطة تغطي: العدّ 1–5 و6–9، المقارنة ضمن 9، الأعداد 11–19، الجمع والطرح ضمن 9، تكوين العدد 10، تمييز الأشكال، والنصف. الباقي (46 درساً في 4 وحدات) خارج هذا الإصدار.",
+      "units": [
+        {
+          "id": "u1-numbers-1-9",
+          "title": "الوحدة 1 — الأعداد 1–9 والمقارنة والترتيب (ص 3–26)",
+          "page": 3,
+          "lessons": 15
+        },
+        {
+          "id": "u2-zero-compose-9",
+          "title": "الوحدة 2 — الصفر ومكونات الأعداد والجمع والطرح ضمن 9 والعدد 10 والأعداد 11–19 (ص 27–45)",
+          "page": 27,
+          "lessons": 9
+        },
+        {
+          "id": "u3-place-add",
+          "title": "الوحدة 3 — القيمة المنزلية والصورة الموسعة والجمع ضمن 10 و18 (ص 46–65)",
+          "page": 46,
+          "lessons": 10
+        },
+        {
+          "id": "u4-sub-shapes",
+          "title": "الوحدة 4 — الطرح ضمن 10 و18 والأعداد 21–99 ومضاعفات العشرة والهندسة وأجزاء الشكل (ص 66–93)",
+          "page": 66,
+          "lessons": 12
+        }
+      ]
+    }
+  },
+  "islands": [
+    {
+      "id": "island-numbers",
+      "title": "جزيرة الأعداد",
+      "subject": "math",
+      "description": "نعدّ الأشياء واحداً واحداً، ثم نقارن: أي مجموعة أكثر؟"
+    },
+    {
+      "id": "island-math",
+      "title": "جزيرة الجمع والطرح",
+      "subject": "math",
+      "description": "نضمّ مجموعة إلى مجموعة، ثم نأخذ منها، والميزان يخبرنا إن كنا أصبنا."
+    },
+    {
+      "id": "island-shapes",
+      "title": "جزيرة الأشكال",
+      "subject": "math",
+      "description": "نميّز الدائرة والمربع والمثلث، ونقسم الشكل إلى نصفين."
+    }
+  ],
+  "skills": [
+    {
+      "id": "g1.math.count.1-5",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-numbers",
+      "title": "نعدّ أشياء من 1 إلى 5 ونصلها بعددها",
+      "prerequisites": [],
+      "order": 1,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 1 — الأعداد 1–9 (ص 3–26)",
+        "page": 3,
+        "edition": "رزم غزة 2024",
+        "note": "ص 3 هي بداية الوحدة الأولى، ودرس العدد 1 أولها؛ نطاق الوحدة كاملاً مثبّت من فهرس الرزمة."
+      }
+    },
+    {
+      "id": "g1.math.count.6-9",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-numbers",
+      "title": "نعدّ أشياء من 6 إلى 9 ونصلها بعددها",
+      "prerequisites": ["g1.math.count.1-5"],
+      "order": 2,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 1 — الأعداد 1–9 (ص 3–26)",
+        "edition": "رزم غزة 2024",
+        "note": "الدرس الثاني في الوحدة الأولى؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      }
+    },
+    {
+      "id": "g1.math.compare.within9",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-numbers",
+      "title": "نقارن مجموعتين: أكثر وأقل",
+      "prerequisites": ["g1.math.count.6-9"],
+      "order": 3,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 1 — المقارنة والترتيب (ضمن ص 3–26)",
+        "edition": "رزم غزة 2024",
+        "note": "المقارنة تأتي بعد اكتمال الأعداد 1–9؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      }
+    },
+    {
+      "id": "g1.math.teens.read",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-numbers",
+      "title": "نقرأ الأعداد من 11 إلى 19 ونعدّها",
+      "prerequisites": ["g1.math.compare.within9"],
+      "order": 4,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 2 — الأعداد 11–19 (ضمن ص 27–45)",
+        "edition": "رزم غزة 2024",
+        "note": "الأعداد 11–19 في نهاية الوحدة الثانية؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      }
+    },
+    {
+      "id": "g1.math.add.within9",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-math",
+      "title": "نجمع مجموعتين ضمن 9",
+      "prerequisites": ["g1.math.count.6-9"],
+      "order": 1,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 2 — الجمع ضمن 9 (ضمن ص 27–45)",
+        "edition": "رزم غزة 2024",
+        "note": "الجمع يُقدَّم بعد مكونات الأعداد في الوحدة الثانية؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      }
+    },
+    {
+      "id": "g1.math.subtract.within9",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-math",
+      "title": "نطرح ضمن 9 ونرى العلاقة بالجمع",
+      "prerequisites": ["g1.math.add.within9"],
+      "order": 2,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 2 — الطرح ضمن 9 والعلاقة بين الجمع والطرح (ضمن ص 27–45)",
+        "edition": "رزم غزة 2024",
+        "note": "الطرح يُقدَّم بعد الجمع وفي الوحدة نفسها؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      }
+    },
+    {
+      "id": "g1.math.compose.ten",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-math",
+      "title": "نكوّن العدد 10 من جزءين",
+      "prerequisites": ["g1.math.add.within9"],
+      "order": 3,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 2 — العدد 10 ومكوناته (ضمن ص 27–45)",
+        "edition": "رزم غزة 2024",
+        "note": "تكوين 10 يسبق الأعداد 11–19 في ترتيب الوحدة؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      }
+    },
+    {
+      "id": "g1.math.shape.identify",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-shapes",
+      "title": "نميّز الدائرة والمربع والمثلث",
+      "prerequisites": [],
+      "order": 1,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 4 — الهندسة (ضمن ص 66–93)",
+        "edition": "رزم غزة 2024",
+        "note": "الهندسة وأجزاء الشكل في نهاية الوحدة الرابعة؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      }
+    },
+    {
+      "id": "g1.math.fraction.halves",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-shapes",
+      "title": "نقسم الشكل إلى نصفين متساويين",
+      "prerequisites": ["g1.math.shape.identify"],
+      "order": 2,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 4 — أجزاء الشكل: النصف والربع (ضمن ص 66–93)",
+        "edition": "رزم غزة 2024",
+        "note": "النصف آخر ما في الوحدة الرابعة؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      }
+    }
+  ],
+  "activities": [
+    {
+      "id": "g1.math.count1.drag.01",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-numbers",
+      "skillId": "g1.math.count.1-5",
+      "template": "drag_match",
+      "title": "اسحب المجموعة إلى عددها",
+      "difficulty": 1,
+      "scaffolding": {
+        "level": 1,
+        "hint": "المس كل تفاحة بإصبعك وعدّ بصوتك: واحد، اثنان، ثلاثة."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 1 — الأعداد 1–5 (ص 3–26)",
+        "page": 3,
+        "edition": "رزم غزة 2024",
+        "note": "ص 3 بداية الوحدة؛ الأرقام لاتينية كما في الكتاب ويُثبَّت ذلك بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "عدّيت بترتيب. ثلاث تفاحات تصل إلى العدد 3.",
+        "retry": "قريب. عُدّ مرة أخرى وابدأ من اليسار."
+      },
+      "config": {
+        "prompt": "عُدّ كل مجموعة، ثم اسحبها إلى عددها.",
+        "shuffleTargets": true,
+        "pairs": [
+          {
+            "id": "p1",
+            "draggable": { "id": "d1", "label": "مجموعة من تفاحتين", "count": 2, "glyph": "apple" },
+            "target": { "id": "t1", "label": "العدد 2", "char": "2" }
+          },
+          {
+            "id": "p2",
+            "draggable": { "id": "d2", "label": "مجموعة من ثلاث تفاحات", "count": 3, "glyph": "apple" },
+            "target": { "id": "t2", "label": "العدد 3", "char": "3" }
+          },
+          {
+            "id": "p3",
+            "draggable": { "id": "d3", "label": "مجموعة من خمس نجوم", "count": 5, "glyph": "star" },
+            "target": { "id": "t3", "label": "العدد 5", "char": "5" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "g1.math.count6.listen.01",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-numbers",
+      "skillId": "g1.math.count.6-9",
+      "template": "listen_identify",
+      "title": "أي مجموعة فيها سبع نجوم؟",
+      "difficulty": 2,
+      "scaffolding": {
+        "level": 1,
+        "hint": "عُدّ نجوماً نجمةً نجمة، وضع إصبعك على كل نجمة تعدّها."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 1 — الأعداد 6–9 (ص 3–26)",
+        "edition": "رزم غزة 2024",
+        "note": "الدرس الثاني في الوحدة الأولى؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "سبع نجوم بالضبط. العدّ الدقيق مهارة تكبر معك.",
+        "retry": "قريب. عُدّ مرة ثانية، ولا تقفز على نجمة."
+      },
+      "config": {
+        "prompt": "أي مجموعة فيها 7 نجوم؟",
+        "spokenText": "سَبْع",
+        "options": [
+          { "id": "a", "label": "خمس نجوم", "count": 5, "glyph": "star", "correct": false },
+          { "id": "b", "label": "سبع نجوم", "count": 7, "glyph": "star", "correct": true },
+          { "id": "c", "label": "تسع نجوم", "count": 9, "glyph": "star", "correct": false }
+        ]
+      }
+    },
+    {
+      "id": "g1.math.compare.listen.01",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-numbers",
+      "skillId": "g1.math.compare.within9",
+      "template": "listen_identify",
+      "title": "أي مجموعة أكثر؟",
+      "difficulty": 2,
+      "scaffolding": {
+        "level": 1,
+        "hint": "عُدّ المجموعتين، والعدد الأكبر يكون صاحب المجموعة الأكثر."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 1 — المقارنة (ضمن ص 3–26)",
+        "edition": "رزم غزة 2024",
+        "note": "المقارنة بعد اكتمال الأعداد 1–9؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "نعم، ستة أكثر من ثلاثة وأربعة. المقارنة صحيحة.",
+        "retry": "قريب. عُدّ الأولى ثم الثانية، وقل أيّهما وصل إلى عدد أكبر."
+      },
+      "config": {
+        "prompt": "أي مجموعة فيها أشياء أكثر؟",
+        "spokenText": "أَكْثَر",
+        "options": [
+          { "id": "a", "label": "ثلاث تفاحات", "count": 3, "glyph": "apple", "correct": false },
+          { "id": "b", "label": "ست تفاحات", "count": 6, "glyph": "apple", "correct": true },
+          { "id": "c", "label": "أربع تفاحات", "count": 4, "glyph": "apple", "correct": false }
+        ]
+      }
+    },
+    {
+      "id": "g1.math.teens.drag.01",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-numbers",
+      "skillId": "g1.math.teens.read",
+      "template": "drag_match",
+      "title": "اسحب المجموعة إلى عددها: 11 إلى 19",
+      "difficulty": 3,
+      "scaffolding": {
+        "level": 1,
+        "hint": "اجمع عشرة كاملة أولاً، ثم عُدّ ما بقي: عشرة وواحد… عشرة واثنان."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 2 — الأعداد 11–19 (ضمن ص 27–45)",
+        "edition": "رزم غزة 2024",
+        "note": "الأعداد 11–19 قبل العدد 20؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "عشرة وإثنان يساويان 12. قراءة موفقة.",
+        "retry": "قريب. عُدّ إلى العشرة، ثم تابع العدّ واحداً واحداً."
+      },
+      "config": {
+        "prompt": "عُدّ كل مجموعة، ثم اسحبها إلى عددها.",
+        "shuffleTargets": true,
+        "pairs": [
+          {
+            "id": "p1",
+            "draggable": { "id": "d1", "label": "اثنا عشر قرصاً", "count": 12, "glyph": "dot" },
+            "target": { "id": "t1", "label": "العدد 12", "char": "12" }
+          },
+          {
+            "id": "p2",
+            "draggable": { "id": "d2", "label": "خمسة عشر قرصاً", "count": 15, "glyph": "dot" },
+            "target": { "id": "t2", "label": "العدد 15", "char": "15" }
+          }
+        ]
+      }
+    },
+    {
+      "id": "g1.math.add.balance.01",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-math",
+      "skillId": "g1.math.add.within9",
+      "template": "balance",
+      "title": "نجمع: ثلاث واثنتان",
+      "difficulty": 2,
+      "scaffolding": {
+        "level": 1,
+        "hint": "ابدأ من الثلاثة، ثم أضف واحدة واحدة: أربعة، خمسة."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 2 — الجمع ضمن 9 (ضمن ص 27–45)",
+        "edition": "رزم غزة 2024",
+        "note": "الجمع بعد مكونات الأعداد؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "ثلاثة واثنان يصيران خمسة. الميزان استوى.",
+        "retry": "قريب. ابدأ بالثلاثة وعُدّ اثنتين بعدها."
+      },
+      "config": {
+        "prompt": "في الطرف الأول 3 و2. كم يساوي المجموع؟",
+        "leftSide": {
+          "items": [
+            { "id": "l1", "value": 3, "label": "3" },
+            { "id": "l2", "value": 2, "label": "2" }
+          ],
+          "total": 5
+        },
+        "rightSide": {
+          "items": [],
+          "options": [
+            { "id": "w4", "value": 4, "label": "4" },
+            { "id": "w5", "value": 5, "label": "5" },
+            { "id": "w6", "value": 6, "label": "6" }
+          ]
+        },
+        "correctAnswer": "w5"
+      }
+    },
+    {
+      "id": "g1.math.sub.balance.01",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-math",
+      "skillId": "g1.math.subtract.within9",
+      "template": "balance",
+      "title": "نطرح: سبعة ناقص ثلاثة",
+      "difficulty": 3,
+      "scaffolding": {
+        "level": 1,
+        "hint": "الميزان يخبرك: ما العدد الذي مع الثلاثة يصير سبعة؟"
+      },
+      "source": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 2 — الطرح ضمن 9 (ضمن ص 27–45)",
+        "edition": "رزم غزة 2024",
+        "note": "الطرح بعد الجمع؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "سبعة فيها ثلاثة وأربعة. الطرح صحيح.",
+        "retry": "قريب. جرّب: ثلاثة وأي عدد يصير سبعة؟"
+      },
+      "config": {
+        "prompt": "كان عندنا 7، وأخذنا 3. كم بقي؟",
+        "leftSide": {
+          "items": [{ "id": "l1", "value": 7, "label": "7" }],
+          "total": 7
+        },
+        "rightSide": {
+          "items": [{ "id": "r1", "value": 3, "label": "3 أُخذت" }],
+          "options": [
+            { "id": "w4", "value": 4, "label": "4" },
+            { "id": "w5", "value": 5, "label": "5" },
+            { "id": "w6", "value": 6, "label": "6" }
+          ]
+        },
+        "correctAnswer": "w4"
+      }
+    },
+    {
+      "id": "g1.math.ten.balance.01",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-math",
+      "skillId": "g1.math.compose.ten",
+      "template": "balance",
+      "title": "نكوّن العشرة",
+      "difficulty": 3,
+      "scaffolding": {
+        "level": 1,
+        "hint": "عُدّ من الأربعة حتى العشرة على أصابعك، واحسب كم أصبعاً رفعت."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 2 — العدد 10 ومكوناته (ضمن ص 27–45)",
+        "edition": "رزم غزة 2024",
+        "note": "تكوين 10 قبل الأعداد 11–19؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "أربعة وستة يكملان العشرة. صار الميزان مستوياً.",
+        "retry": "قريب. اثنان فقط لا يكفيان؛ جرّب عداً أكبر."
+      },
+      "config": {
+        "prompt": "معنا 4 في طرف، ونريد أن نصل إلى 10. كم نضيف؟",
+        "leftSide": {
+          "items": [{ "id": "l1", "value": 10, "label": "10" }],
+          "total": 10
+        },
+        "rightSide": {
+          "items": [{ "id": "r1", "value": 4, "label": "4" }],
+          "options": [
+            { "id": "w4", "value": 4, "label": "4" },
+            { "id": "w6", "value": 6, "label": "6" },
+            { "id": "w7", "value": 7, "label": "7" }
+          ]
+        },
+        "correctAnswer": "w6"
+      }
+    },
+    {
+      "id": "g1.math.shapes.listen.01",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-shapes",
+      "skillId": "g1.math.shape.identify",
+      "template": "listen_identify",
+      "title": "أين الدائرة؟",
+      "difficulty": 1,
+      "scaffolding": {
+        "level": 1,
+        "hint": "الدائرة تشبه الشمس: لا زوايا لها ولا أضلاع."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 4 — الهندسة (ضمن ص 66–93)",
+        "edition": "رزم غزة 2024",
+        "note": "الأشكال الهندسية في نهاية الوحدة الرابعة؛ رقم الصفحة الدقيق يُثبَّت بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "هذه الدائرة: مستديرة بلا زوايا.",
+        "retry": "قريب. ابحث عن الشكل المستدير الذي لا زوايا له."
+      },
+      "config": {
+        "prompt": "أي شكل هو الدائرة؟",
+        "spokenText": "دائرة",
+        "options": [
+          { "id": "a", "label": "مربع", "glyph": "square", "correct": false },
+          { "id": "b", "label": "دائرة", "glyph": "circle", "correct": true },
+          { "id": "c", "label": "مثلث", "glyph": "triangle", "correct": false }
+        ]
+      }
+    },
+    {
+      "id": "g1.math.halves.trace.01",
+      "grade": 1,
+      "subject": "math",
+      "islandId": "island-shapes",
+      "skillId": "g1.math.fraction.halves",
+      "template": "trace_path",
+      "title": "اقسم التفاحة إلى نصفين",
+      "difficulty": 3,
+      "scaffolding": {
+        "level": 1,
+        "hint": "ابدأ من أعلى التفاحة، وانزل بخط مستقيم إلى أسفلها."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "رياضيات١كل المتمازجة غزة.pdf",
+        "unit": "الوحدة 4 — أجزاء الشكل: النصف والربع (ضمن ص 66–93)",
+        "edition": "رزم غزة 2024",
+        "note": "المسار خط منتصف أفقي على شكل التفاحة؛ يُضبط بصرياً على رسم الكتاب."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "قسمت التفاحة نصفين متساويين. هذا هو النصف.",
+        "retry": "قريب. اتبع الخط الذهبي من الأعلى إلى الأسفل بلا انحراف."
+      },
+      "config": {
+        "prompt": "اتبع الخط الذهبي من أعلى التفاحة إلى أسفلها.",
+        "character": "½",
+        "strokePath": "M 108 42 C 106 72 106 104 108 138",
+        "minCoverage": 0.7,
+        "tolerance": 32,
+        "showGuide": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="مفتاح">
+  <title>مِفْتَاح</title>
+  <circle cx="40" cy="44" r="20" fill="#F59E0B" stroke="#173F38" stroke-width="3"/>
+  <circle cx="40" cy="44" r="7" fill="#F5F1E6" stroke="#173F38" stroke-width="3"/>
+  <path d="M56 58 L98 100" stroke="#173F38" stroke-width="11" stroke-linecap="round"/>
+  <path d="M56 58 L98 100" stroke="#F59E0B" stroke-width="6" stroke-linecap="round"/>
+  <path d="M86 88 l12 12 M74 76 l10 10" stroke="#173F38" stroke-width="4" stroke-linecap="round"/>
+</svg>
