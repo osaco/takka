@@ -8,6 +8,10 @@
     "start": "next start --hostname 127.0.0.1",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
+    "content:validate": "node --no-warnings --experimental-strip-types scripts/validate-content.ts",
+    "test:content": "node --no-warnings --experimental-strip-types --test lib/core/content-validator.test.ts",
+    "test:templates": "node --no-warnings --experimental-strip-types --test lib/core/templates.test.ts",
+    "test": "npm run test:content && npm run test:templates",
     "test:e2e": "playwright test"
   },
   "dependencies": {

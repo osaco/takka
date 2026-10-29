@@ -1,25 +1,10 @@
+import type { Activity, ActivityQuestion, LearningEvidence, ScaffoldStep, SkillProgressRecord } from "@/lib/core/types";
+
 export type BuildingKey = "letters" | "numbers" | "stories";
 
-export type LessonQuestion = {
-  prompt: string;
-  choices: string[];
-  answer: string;
-  object?: string;
-  hint?: string;
-};
-
-export type Lesson = {
-  id: string;
-  activityId: string;
-  skillId: string;
-  building: BuildingKey;
-  title: string;
-  subtitle: string;
-  icon: string;
-  theme: "green" | "apricot" | "blue";
-  questions: LessonQuestion[];
-  reward: { stars: number; planks: number; itemKey: string; itemId: string };
-};
+export type LessonQuestion = ActivityQuestion;
+export type Lesson = Activity;
+export type { ScaffoldStep };
 
 export type ChildProfile = {
   id: string;
@@ -45,6 +30,8 @@ export type LocalProgress = {
   milestonesClaimed: string[];
   audioEnabled: boolean;
   updatedAt: string;
+  evidences?: LearningEvidence[];
+  skillsProgress?: Record<string, SkillProgressRecord>;
 };
 
 export type PendingAttempt = {

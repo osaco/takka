@@ -390,3 +390,268 @@ h3 { font-size: 20px; font-weight: 800; }
 @media (max-width: 920px) { .upgrade-row { grid-template-columns: 1fr; } }
 @media (max-width: 920px) { .extension-grid { grid-template-columns: 1fr; } }
 @media (max-width: 620px) { .island-upgrades { padding: 13px; } .upgrade-card { flex-wrap: wrap; } .upgrade-card .button { margin-inline-start: auto; } .island-inventory { align-items: flex-start; } .island-item-chip { flex-wrap: wrap; } .child-edit { width: 100%; order: 3; } .progress-row { gap: 8px; padding: 9px; } .progress-row .status-badge { font-size: 10px; } }
+
+/* ===================================================
+   قوالب الأنشطة التفاعلية — المرحلة P3
+   =================================================== */
+
+/* 1. قالب سحب ومطابقة (DragMatch) */
+.drag-match-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.targets-row, .draggables-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.drop-target {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  min-height: 88px;
+  padding: 10px;
+  border: 2px dashed #b5c7ba;
+  border-radius: 18px;
+  background: var(--white);
+  color: var(--sea-ink);
+  cursor: pointer;
+  transition: all .2s ease;
+  user-select: none;
+}
+
+.drop-target.active-target {
+  border-color: var(--apricot);
+  background: #fbf5ea;
+  transform: scale(1.03);
+}
+
+.drop-target.matched {
+  border-style: solid;
+  border-color: var(--journey);
+  background: #e7efe3;
+  color: var(--journey);
+  cursor: default;
+}
+
+.target-char {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.target-label {
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+.drag-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 88px;
+  min-height: 56px;
+  padding: 10px 16px;
+  border: 2px solid var(--line);
+  border-radius: 16px;
+  background: var(--white);
+  color: var(--sea-ink);
+  font-size: 17px;
+  font-weight: 800;
+  cursor: grab;
+  touch-action: manipulation;
+  user-select: none;
+  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+
+.drag-item:active {
+  cursor: grabbing;
+}
+
+.drag-item.selected {
+  border-color: var(--journey);
+  background: #f0f6ec;
+  box-shadow: 0 0 0 3px rgba(40,98,83,.2);
+  transform: translateY(-2px);
+}
+
+.drag-item.matched {
+  opacity: 0.35;
+  pointer-events: none;
+  border-color: transparent;
+  background: #e8e3d5;
+}
+
+/* 2. قالب تتبع مسار (TracePath) */
+.trace-path-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+}
+
+.trace-canvas-wrap {
+  position: relative;
+  width: min(320px, 100%);
+  aspect-ratio: 4 / 3;
+  border: 2px dashed #b5c7ba;
+  border-radius: 24px;
+  background: var(--white);
+  box-shadow: 0 6px 20px rgba(23,63,56,.05);
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.trace-svg {
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  user-select: none;
+  cursor: crosshair;
+}
+
+.trace-guide-path {
+  fill: none;
+  stroke: #ded7c6;
+  stroke-width: 22;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 6 8;
+}
+
+.trace-user-path {
+  fill: none;
+  stroke: var(--journey);
+  stroke-width: 14;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.trace-user-path.completed {
+  stroke: #286253;
+  filter: drop-shadow(0 0 4px rgba(40,98,83,.3));
+}
+
+.trace-checkpoint {
+  transition: all .2s ease;
+}
+
+.trace-checkpoint.passed {
+  fill: var(--journey);
+  stroke: white;
+}
+
+.trace-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.trace-notice {
+  font-size: 13px;
+  color: var(--ink-soft);
+  max-width: 480px;
+  margin-top: 6px;
+  line-height: 1.5;
+}
+
+/* 3. قالب استماع وتمييز (ListenIdentify) */
+.listen-identify-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  width: 100%;
+}
+
+.listen-audio-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.listen-play-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 60px;
+  padding: 12px 24px;
+  border: 2px solid var(--journey);
+  border-radius: 20px;
+  background: #f0f6ec;
+  color: var(--journey);
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all .16s ease;
+}
+
+.listen-play-btn:hover:not(:disabled) {
+  background: #e3ede0;
+  transform: scale(1.02);
+}
+
+.listen-play-btn.playing {
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
+
+.listen-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+  width: 100%;
+  margin-top: 6px;
+}
+
+.listen-option-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 72px;
+  padding: 14px;
+  border: 2px solid #d7d1c1;
+  border-radius: 18px;
+  background: var(--white);
+  color: var(--sea-ink);
+  font-size: 19px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all .16s ease;
+}
+
+.listen-option-card:hover {
+  border-color: #9eae9e;
+  transform: translateY(-2px);
+}
+
+.listen-option-card.correct {
+  border-color: var(--journey);
+  background: #e7efe3;
+  color: var(--journey);
+}
+
+.listen-option-card.wrong {
+  border-color: #d9a28e;
+  background: #f8ebe5;
+  color: #7e493a;
+}
+

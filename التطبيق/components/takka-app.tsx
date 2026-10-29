@@ -9,6 +9,11 @@ import {
 import { AuthPanel } from "@/components/auth-panel";
 import { FatinMark, IslandIllustration } from "@/components/island-illustration";
 import { LessonPlayer } from "@/components/lesson-player";
+import { createLearningEvidenceFromCompletion } from "@/lib/core/activity";
+import { STARTER_ACTIVITIES, STARTER_SKILLS } from "@/lib/core/content";
+import { summarizeAllSkills } from "@/lib/core/mastery";
+import { evaluateActivityRewards, evaluateBuildingUpgrade } from "@/lib/core/rewards";
+import type { LearningEvidence } from "@/lib/core/types";
 import { BUILDINGS, createInitialProgress, INITIAL_BUILDING_LEVELS, LESSONS } from "@/lib/demo-content";
 import { addPendingAttempt, clearAllTakkaLocalData, clearChildLocalData, readPendingAttempts, readProgress, removePendingAttempt, writeProgress } from "@/lib/progress-store";
 import { isCloudAccountsEnabled } from "@/lib/supabase/env";
@@ -113,6 +118,27 @@ function textForLevel(level: number) {
   return level === 1 ? "بدأ يكبر" : "ينتظرك";
 }
 
+function getActiveSessionId(childId: string): string {
+  if (typeof window === "undefined") return `session-${childId}-ssr`;
+  const sessionKey = `takka.active-session.${childId}`;
+  try {
+    let sid = window.sessionStorage.getItem(sessionKey);
+    if (!sid) {
+      sid = `session-${childId}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+      window.sessionStorage.setItem(sessionKey, sid);
+    }
+    return sid;
+  } catch {
+    // في حال تقييد sessionStorage، نحافظ على ثبات الجلسة في نطاق النافذة عبر متغير عام
+    const win = window as unknown as { __takkaSessions?: Record<string, string> };
+    win.__takkaSessions = win.__takkaSessions ?? {};
+    if (!win.__takkaSessions[childId]) {
+      win.__takkaSessions[childId] = `session-${childId}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
+    }
+    return win.__takkaSessions[childId];
+  }
+}
+
 export function TakkaApp() {
   const [screen, setScreen] = useState<Screen>("loading");
   const [child, setChild] = useState<ChildProfile | null>(null);
@@ -144,6 +170,7 @@ export function TakkaApp() {
     setProgress(nextProgress);
     writeProgress(nextProgress);
     window.localStorage.setItem(ACTIVE_CHILD_KEY, nextChild.id);
+    getActiveSessionId(nextChild.id);
     setScreen(nextScreen);
   }, []);
 
@@ -385,15 +412,13 @@ export function TakkaApp() {
 
   async function upgradeBuilding(key: BuildingKey) {
     if (!child || !progress) return;
-    if (progress.planks < 2) {
-      showToast("تحتاج إلى لوحين خشبيين. تكسبهما من محطات التعلم.");
-      return;
-    }
     const current = progress.buildingLevels[key];
-    if (current >= 3) {
-      showToast("وصل هذا المبنى إلى مرحلته الحالية الأخيرة.");
+    const upgradeEvaluation = evaluateBuildingUpgrade(key, current, progress.planks);
+    if (!upgradeEvaluation.canUpgrade) {
+      showToast(upgradeEvaluation.reason ?? "لا يمكن تطوير هذا البيت الآن.");
       return;
     }
+
     if (guardian) {
       const client = createClient();
       if (!client || !online) {
@@ -401,18 +426,34 @@ export function TakkaApp() {
         return;
       }
       setBusy(true);
-      const { data, error } = await client.rpc("upgrade_child_building", { p_child_id: child.id, p_building_key: key, p_expected_level: current });
+      const { data, error } = await client.rpc("upgrade_child_building", {
+        p_child_id: child.id,
+        p_building_key: key,
+        p_expected_level: current,
+      });
       setBusy(false);
       if (error) {
-        showToast(error.message.includes("not_enough_planks") ? "تحتاج إلى لوحين غير مستخدمين لتطوير هذا البيت." : "تعذر تطوير البيت الآن.");
+        showToast(
+          error.message.includes("not_enough_planks")
+            ? "تحتاج إلى لوحين غير مستخدمين لتطوير هذا البيت."
+            : "تعذر تطوير البيت الآن.",
+        );
         return;
       }
       const result = data as { planks_balance?: number };
-      const nextProgress = { ...progress, planks: result.planks_balance ?? progress.planks - 2, buildingLevels: { ...progress.buildingLevels, [key]: current + 1 } };
+      const nextProgress = {
+        ...progress,
+        planks: result.planks_balance ?? upgradeEvaluation.remainingPlanks,
+        buildingLevels: { ...progress.buildingLevels, [key]: upgradeEvaluation.nextLevel },
+      };
       setProgress(nextProgress);
       writeProgress(nextProgress);
     } else {
-      const nextProgress = { ...progress, planks: progress.planks - 2, buildingLevels: { ...progress.buildingLevels, [key]: current + 1 } };
+      const nextProgress = {
+        ...progress,
+        planks: upgradeEvaluation.remainingPlanks,
+        buildingLevels: { ...progress.buildingLevels, [key]: upgradeEvaluation.nextLevel },
+      };
       setProgress(nextProgress);
       writeProgress(nextProgress);
     }
@@ -473,37 +514,86 @@ export function TakkaApp() {
     }
   }
 
-  async function completeLesson(details: { helpUsed: boolean; startedAt: string; answers: string[] }) {
-    if (!child || !progress || !activeLesson || progress.completedLessonIds.includes(activeLesson.id)) return;
-    const completedLessonIds = [...progress.completedLessonIds, activeLesson.id];
-    const completesMilestone = completedLessonIds.length >= 3 && !progress.milestonesClaimed.includes(MILESTONE_KEY);
-    const item = ITEM_LABELS[activeLesson.reward.itemKey];
+  async function completeLesson(details: {
+    helpUsed: boolean;
+    startedAt: string;
+    completedAt?: string;
+    answers: string[];
+    stepAttempts?: number[];
+  }) {
+    if (!child || !progress || !activeLesson) return;
+
+    const completedAt = details.completedAt ?? new Date().toISOString();
+    const stepAttempts = details.stepAttempts ?? new Array(activeLesson.questions.length).fill(1);
+
+    // تقييم المكافأة بشكل قطعي وثابت عبر نواة تكة (يمنع التكرار للمحطة المراجعة)
+    const rewardResult = evaluateActivityRewards(
+      activeLesson,
+      progress.completedLessonIds,
+      progress.milestonesClaimed,
+    );
+
+    // تسجيل دليل التعلم بجلسة حقيقية
+    const evidence = createLearningEvidenceFromCompletion({
+      activityId: activeLesson.activityId,
+      skillId: activeLesson.skillId,
+      helpUsed: details.helpUsed,
+      startedAt: details.startedAt,
+      completedAt,
+      answers: details.answers,
+      stepAttempts,
+      sessionId: getActiveSessionId(child.id),
+    });
+
+    const nextEvidences = [...(progress.evidences ?? []), evidence];
+    const nextSkillsProgress = summarizeAllSkills(STARTER_SKILLS, nextEvidences);
+    const nextMasteredIds = Object.values(nextSkillsProgress)
+      .filter((r) => r.isMastered)
+      .map((r) => r.skillId);
+
+    const completedLessonIds = progress.completedLessonIds.includes(activeLesson.id)
+      ? progress.completedLessonIds
+      : [...progress.completedLessonIds, activeLesson.id];
+
+    const assistedLessonIds =
+      details.helpUsed && !progress.assistedLessonIds.includes(activeLesson.id)
+        ? [...progress.assistedLessonIds, activeLesson.id]
+        : progress.assistedLessonIds;
+
+    const placedItems = [...new Set([...progress.placedItems, ...rewardResult.newPlacedItemKeys])];
+    const itemPlacements = { ...progress.itemPlacements };
+    for (const key of rewardResult.newPlacedItemKeys) {
+      itemPlacements[key] = itemPlacements[key] ?? "shore";
+    }
+
     const nextProgress: LocalProgress = {
       ...progress,
       completedLessonIds,
-      assistedLessonIds: details.helpUsed && !progress.assistedLessonIds.includes(activeLesson.id)
-        ? [...progress.assistedLessonIds, activeLesson.id]
-        : progress.assistedLessonIds,
-      buildingLevels: { ...progress.buildingLevels, [activeLesson.building]: Math.max(1, progress.buildingLevels[activeLesson.building]) },
-      stars: progress.stars + activeLesson.reward.stars,
-      planks: progress.planks + activeLesson.reward.planks + (completesMilestone ? 3 : 0),
-      placedItems: [...new Set([...progress.placedItems, activeLesson.reward.itemKey, ...(completesMilestone ? ["sea-lantern"] : [])])],
-      itemPlacements: {
-        ...progress.itemPlacements,
-        [activeLesson.reward.itemKey]: progress.itemPlacements[activeLesson.reward.itemKey] ?? "shore",
-        ...(completesMilestone ? { "sea-lantern": "shore" as const } : {}),
+      masteredSkillIds: nextMasteredIds,
+      assistedLessonIds,
+      buildingLevels: {
+        ...progress.buildingLevels,
+        [activeLesson.building]: Math.max(1, progress.buildingLevels[activeLesson.building]),
       },
-      milestonesClaimed: completesMilestone ? [...progress.milestonesClaimed, MILESTONE_KEY] : progress.milestonesClaimed,
+      stars: progress.stars + rewardResult.starsEarned,
+      planks: progress.planks + rewardResult.planksEarned,
+      placedItems,
+      itemPlacements,
+      milestonesClaimed: rewardResult.completesMilestone
+        ? [...progress.milestonesClaimed, MILESTONE_KEY]
+        : progress.milestonesClaimed,
+      evidences: nextEvidences,
+      skillsProgress: nextSkillsProgress,
     };
+
     setProgress(nextProgress);
     writeProgress(nextProgress);
-    const tokens = [`⭐ ${activeLesson.reward.stars} نجوم`, `🪵 ${activeLesson.reward.planks + (completesMilestone ? 3 : 0)} ألواح`, `${item.icon} ${item.name}`];
-    if (completesMilestone) tokens.push("🪸 فانوس البحر");
+
     setRewardMoment({
-      title: completesMilestone ? "وصلت إلى صندوق محطاتك الثلاث!" : "أضفت شيئاً جميلاً لجزيرتك",
-      description: completesMilestone ? "مكافأته ثابتة ومعلومة: ثلاثة ألواح وفانوس بحر خاص. شفت كيف كبرت الجزيرة بالمحاولة؟" : "كل محطة تعلم تضيف أثراً صغيراً تقدر تشوفه على جزيرتك.",
-      tokens,
-      chest: completesMilestone,
+      title: rewardResult.message.title,
+      description: rewardResult.message.description,
+      tokens: rewardResult.message.tokens,
+      chest: rewardResult.message.isMilestoneChest,
     });
 
     if (guardian) {
@@ -516,16 +606,45 @@ export function TakkaApp() {
         outcome: "completed",
         help_used: details.helpUsed,
         started_at: details.startedAt,
-        completed_at: new Date().toISOString(),
-        first_completion: true,
+        completed_at: completedAt,
+        first_completion: rewardResult.isFirstCompletion,
         building_key: activeLesson.building,
-        stars_earned: activeLesson.reward.stars,
-        planks_earned: activeLesson.reward.planks,
+        stars_earned: rewardResult.starsEarned,
+        planks_earned: rewardResult.planksEarned,
         item_id: activeLesson.reward.itemId,
       };
       addPendingAttempt(attempt);
       void syncAttempt(attempt);
     }
+  }
+
+  function exitLesson(hasInteracted?: boolean) {
+    if (activeLesson && hasInteracted && child && progress) {
+      const currentSkillState = progress.skillsProgress?.[activeLesson.skillId]?.state;
+      if (!currentSkillState || currentSkillState === "not_reached") {
+        const abandonedEvidence: LearningEvidence = {
+          id: `ev-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`,
+          skillId: activeLesson.skillId,
+          activityId: activeLesson.activityId,
+          timestamp: new Date().toISOString(),
+          kind: "abandoned",
+          attemptsCount: 1,
+          helpUsed: false,
+          durationMs: 0,
+          sessionId: getActiveSessionId(child.id),
+        };
+        const nextEvidences = [...(progress.evidences ?? []), abandonedEvidence];
+        const nextSkillsProgress = summarizeAllSkills(STARTER_SKILLS, nextEvidences);
+        const nextProgress = {
+          ...progress,
+          evidences: nextEvidences,
+          skillsProgress: nextSkillsProgress,
+        };
+        setProgress(nextProgress);
+        writeProgress(nextProgress);
+      }
+    }
+    setActiveLesson(null);
   }
 
   async function archiveChild(profile: ChildProfile) {
@@ -734,8 +853,8 @@ export function TakkaApp() {
               const lesson = LESSONS.find((item) => item.building === building.key)!;
               const done = progress.completedLessonIds.includes(lesson.id);
               const level = progress.buildingLevels[building.key];
-              return <button className="building-card" key={building.key} type="button" data-testid={`building-${building.key}`} onClick={() => done ? showToast("أنهيت هذه المحطة. تقدر تراجعها من قائمة المهمات وقت ما تحب.") : startLesson(lesson)}>
-                <span className="building-top"><span className={`building-symbol theme-${building.theme}`}>{building.icon}</span><span className="building-level">{done ? <><Check size={14} /> اكتملت</> : `مرحلة ${level}`}</span></span>
+              return <button className="building-card" key={building.key} type="button" data-testid={`building-${building.key}`} onClick={() => startLesson(lesson)}>
+                <span className="building-top"><span className={`building-symbol theme-${building.theme}`}>{building.icon}</span><span className="building-level">{done ? <><Check size={14} /> مراجعة</> : `مرحلة ${level}`}</span></span>
                 <span><span className="building-title">{building.title}</span><span className="building-subject">{building.subject} · {building.description}</span></span>
                 <span className="building-progress"><span style={{ width: done ? "100%" : "12%" }} /></span>
               </button>;
@@ -759,7 +878,7 @@ export function TakkaApp() {
       <div className="page-title-row"><div><p className="eyebrow">اختيارك، وبالسرعة اللي تناسبك</p><h1>{panelTitle}</h1><p>المهمات هنا محطات تعلّم صغيرة، بلا عدّ تنازلي.</p></div><span className="status-badge"><Star size={14} /> {completedLessons.length} من 3</span></div>
       <div className="mission-list">{LESSONS.map((lesson, index) => {
         const done = progress.completedLessonIds.includes(lesson.id);
-        return <article className="mission-card" key={lesson.id}><span className="mission-icon">{done ? <Check size={24} /> : lesson.icon}</span><div><h3>{index === 0 ? "اكتشاف صوت الحرف" : index === 1 ? "عدّ الأشياء" : "رتّب أحداث الحكاية"}</h3><p>{lesson.subtitle}</p></div><span className={`mission-status${done ? "" : " pending"}`}>{done ? "أنجزتها" : "مفتوحة"}</span><span className="mission-reward">⭐ {lesson.reward.stars} · 🪵 {lesson.reward.planks}</span>{!done && <button className="button button-secondary button-small" type="button" onClick={() => startLesson(lesson)}>افتح المهمة</button>}</article>;
+        return <article className="mission-card" key={lesson.id}><span className="mission-icon">{done ? <Check size={24} /> : lesson.icon}</span><div><h3>{index === 0 ? "اكتشاف صوت الحرف" : index === 1 ? "عدّ الأشياء" : "رتّب أحداث الحكاية"}</h3><p>{lesson.subtitle}</p></div><span className={`mission-status${done ? "" : " pending"}`}>{done ? "أنجزتها" : "مفتوحة"}</span><span className="mission-reward">⭐ {lesson.reward.stars} · 🪵 {lesson.reward.planks}</span><button className="button button-secondary button-small" type="button" onClick={() => startLesson(lesson)}>{done ? "مراجعة المحطة" : "افتح المهمة"}</button></article>;
       })}
         <article className="mission-card milestone-card"><span className="mission-icon">🎁</span><div><h3>صندوق محطات الجزيرة الثلاث</h3><p>مكافأة معلومة: فانوس بحر وثلاثة ألواح بعد إكمال المحطات الثلاث.</p></div><span className={`mission-status${progress.milestonesClaimed.includes(MILESTONE_KEY) ? "" : " pending"}`}>{progress.milestonesClaimed.includes(MILESTONE_KEY) ? "استلمته" : `${completedLessons.length}/3`}</span><span className="mission-reward">🪸 فانوس + 🪵3</span></article>
       </div>
@@ -775,7 +894,66 @@ export function TakkaApp() {
       <div className="parent-summary"><div className="summary-card"><strong className="summary-value">{children.length}</strong><span className="summary-caption">ملفات أطفال نشطة</span></div><div className="summary-card"><strong className="summary-value">{completedLessons.length}/3</strong><span className="summary-caption">محطات {child.nickname}</span></div><div className="summary-card"><strong className="summary-value">{progress.stars}</strong><span className="summary-caption">نجوم رحلة {child.nickname}</span></div></div>
       <h2>ملفات الأسرة</h2>
       <div className="child-list">{children.map((profile) => <div className="child-row" key={profile.id}><span className="avatar-chip">{profile.avatar_key}</span>{editingChildId === profile.id ? <ChildProfileEditor profile={profile} busy={busy} onCancel={() => setEditingChildId(null)} onSave={(nickname, grade) => void saveChildEdit(profile, nickname, grade)} /> : <div className="child-row-main"><strong>{profile.nickname}</strong><small>الصف {profile.grade} · {profile.id === child.id ? "الملف المفتوح" : "ملف الأسرة"}</small></div>}<div className="child-row-actions"><button className="button button-secondary button-small" type="button" onClick={() => void selectChild(profile)}>{profile.id === child.id ? "الجزيرة الحالية" : "افتح الجزيرة"}</button>{editingChildId !== profile.id && <button className="button button-quiet button-small" type="button" onClick={() => setEditingChildId(profile.id)}>تعديل الملف</button>}<button className="button button-quiet button-small" type="button" onClick={() => { if (window.confirm(`هل تريد أرشفة ملف ${profile.nickname}؟ سيختفي من قائمة الأسرة.`)) void archiveChild(profile); }}>أرشفة</button></div></div>)}</div>
-      <section className="parent-progress"><div className="section-heading"><h2>ماذا جرّب {child.nickname}؟</h2><span className="small-count">ملخص وصفي فقط</span></div>{LESSONS.map((lesson) => { const done = progress.completedLessonIds.includes(lesson.id); const assisted = progress.assistedLessonIds.includes(lesson.id); return <div className="progress-row" key={lesson.id}><span className={`building-symbol theme-${lesson.theme}`}>{lesson.icon}</span><div><strong>{lesson.title}</strong><small>{done ? assisted ? "أنهاها مع تلميح من فطين" : "أنهاها دون طلب تلميح" : "لم تُجرّب بعد"}</small></div><span className={`status-badge${done ? "" : " offline"}`}>{done ? "مكتملة" : "متاحة"}</span></div>; })}</section>
+      <section className="parent-progress">
+        <div className="section-heading"><h2>ماذا جرّب {child.nickname}؟</h2><span className="small-count">سجل المهارات والإتقان</span></div>
+        {STARTER_SKILLS.map((skill) => {
+          const record = progress.skillsProgress?.[skill.id];
+          const activity = STARTER_ACTIVITIES.find((a) => a.skillId === skill.id);
+          const hasLegacy = Boolean(
+            activity &&
+            progress.completedLessonIds.includes(activity.id) &&
+            (!record || record.totalAttempts === 0)
+          );
+          const state = record?.state ?? "not_reached";
+
+          let stateLabel = "لم يصل إليها بعد";
+          if (hasLegacy) {
+            stateLabel = "أكمل المحطة سابقاً";
+          } else if (state === "independent") {
+            stateLabel = record?.isMastered ? "متقنة (معيار تجريبي يحتاج اعتماداً)" : "أنجز محاولة مستقلة";
+          } else if (state === "with_help") {
+            stateLabel = "أكمل بمساعدة تلميح";
+          } else if (state === "tried") {
+            stateLabel = "استكشف وجرّب";
+          }
+
+          const badgeLabel = record?.isMastered
+            ? "⭐ متقنة"
+            : hasLegacy
+            ? "أكمل المحطة سابقاً"
+            : state === "independent"
+            ? "محاولة مستقلة"
+            : state === "with_help"
+            ? "بمساعدة تلميح"
+            : state === "tried"
+            ? "استكشف وجرّب"
+            : "لم يصل إليها";
+
+          return (
+            <div className="progress-row" key={skill.id}>
+              <span className={`building-symbol theme-${activity?.theme ?? "green"}`}>{activity?.icon ?? "✦"}</span>
+              <div>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", flexWrap: "wrap" }}>
+                  <strong>{skill.title}</strong>
+                  {record?.isMastered && <span className="status-badge" style={{ backgroundColor: "#286253", color: "#fff", fontSize: "0.75rem", padding: "0.15rem 0.5rem" }}>⭐ متقنة (تجريبي)</span>}
+                  {record?.needsReview && <span className="status-badge offline" style={{ fontSize: "0.75rem", padding: "0.15rem 0.5rem" }}>تحتاج مراجعة دافئة</span>}
+                </div>
+                <small>
+                  {hasLegacy
+                    ? "أُنجزت المحطة في نسخة سابقة · بانتظار 3 أدلة إتقان مستقلة في جلستين مسجلة حديثاً (معيار تجريبي يحتاج اعتماداً)"
+                    : record && record.totalAttempts > 0
+                    ? `${stateLabel} · ${record.independentCount} من 3 أدلة مستقلة مطلوبة وفق المعيار التجريبي (${record.totalAttempts} محاولات مسجلة)`
+                    : stateLabel}
+                  {" · "}
+                  {skill.sourceRef.note ?? "عينة تأسيسية محايدة"}
+                </small>
+              </div>
+              <span className={`status-badge${record?.isMastered ? "" : state === "independent" || state === "with_help" || hasLegacy ? " pending" : " offline"}`}>{badgeLabel}</span>
+            </div>
+          );
+        })}
+        <p className="privacy-note" style={{ marginTop: "0.75rem" }}>معيار الإتقان التجريبي (فرضية عمل تحتاج اعتماداً تربوياً): 3 أدلة مستقلة في جلستين مختلفتين بفاصل يوم على الأقل دون تلميح. عتبات الإتقان وجداول المراجعة (مثل 21 يوماً) هي تقديرات وفرضيات عمل وليست قواعد تربوية معتمدة. حالات التقدم أوصاف تعليمية لما جُرّب في الرحلة وليست درجات عامة أو أحكاماً على الطفل.</p>
+      </section>
       <form className="form-card" onSubmit={addChild}>
         <h2>أضف ملفاً لطفل آخر</h2><p>لا حاجة لبريد أو كلمة مرور للطفل.</p>
         <div className="form-grid"><label className="field"><span className="field-label">لقب الطفل</span><input className="plain-input" value={newChildName} onChange={(event) => setNewChildName(event.target.value)} maxLength={28} placeholder="لقب داخل الأسرة" required /></label><label className="field"><span className="field-label">الصف</span><select className="select-input" value={newChildGrade} onChange={(event) => setNewChildGrade(Number(event.target.value))}>{[1,2,3,4,5,6].map((grade) => <option key={grade} value={grade}>الصف {grade}</option>)}</select></label></div>
@@ -803,7 +981,7 @@ export function TakkaApp() {
       <button className={`app-tab${screen === "settings" ? " active" : ""}`} type="button" onClick={() => setScreen("settings")}><Settings size={18} /> الإعدادات</button>
     </nav>
 
-    {activeLesson && <LessonPlayer lesson={activeLesson} childId={child.id} audioEnabled={progress.audioEnabled} onExit={() => setActiveLesson(null)} onComplete={(details) => { void completeLesson(details); setActiveLesson(null); }} />}
+    {activeLesson && <LessonPlayer lesson={activeLesson} childId={child.id} audioEnabled={progress.audioEnabled} onExit={(hasInteracted) => exitLesson(hasInteracted)} onComplete={(details) => { void completeLesson(details); setActiveLesson(null); }} />}
     {rewardMoment && <div className="reward-scrim"><section className="reward-card" role="dialog" aria-modal="true" aria-labelledby="reward-title"><span className="reward-chest" aria-hidden="true">{rewardMoment.chest ? "🎁" : "✨"}</span><p className="eyebrow">{rewardMoment.chest ? "صندوق معلومة مكافأته" : "أثر جديد على الجزيرة"}</p><h2 id="reward-title">{rewardMoment.title}</h2><p>{rewardMoment.description}</p><div className="reward-items">{rewardMoment.tokens.map((token) => <span className="reward-token" key={token}>{token}</span>)}</div><button className="button button-primary" type="button" onClick={() => setRewardMoment(null)}>أرجع إلى جزيرتي <ArrowRight size={17} /></button></section></div>}
     {authMode && configured && <AuthPanel mode={authMode} configured={configured} onModeChange={setAuthMode} onClose={() => setAuthMode(null)} onAuthenticated={(user) => void bootstrapGuardian(user)} />}
     {toast && <div className="offline-notice" role="status"><CircleHelp size={16} />{toast}</div>}

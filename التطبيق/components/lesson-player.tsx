@@ -1,36 +1,75 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { ArrowRight, Check, HelpCircle, Volume2, X } from "lucide-react";
+import { ArrowRight, HelpCircle, X } from "lucide-react";
+import { resolveScaffoldHint } from "@/lib/core/activity";
 import type { Lesson } from "@/lib/types";
+import { ActivityTemplateHost } from "@/components/activity-templates/activity-template-host";
 
 type Props = {
   lesson: Lesson;
   childId: string;
   audioEnabled: boolean;
-  onExit: () => void;
-  onComplete: (details: { helpUsed: boolean; startedAt: string; answers: string[] }) => void;
+  onExit: (hasInteracted?: boolean) => void;
+  onComplete: (details: {
+    helpUsed: boolean;
+    startedAt: string;
+    completedAt: string;
+    answers: string[];
+    stepAttempts: number[];
+  }) => void;
 };
 
-type Draft = { lessonId: string; step: number; helpUsed: boolean; startedAt: string; answers: string[]; selected: string | null };
+type Draft = {
+  lessonId: string;
+  step: number;
+  helpUsed: boolean;
+  startedAt: string;
+  answers: string[];
+  selected: string | null;
+  stepAttempts?: number[];
+};
 
 export function LessonPlayer({ lesson, childId, audioEnabled, onExit, onComplete }: Props) {
   const legacyDraftKey = `takka.draft.v1.${childId}`;
   const draftKey = `${legacyDraftKey}.${lesson.id}`;
-  const initialDraft = useMemo(() => typeof window === "undefined" ? null : readDraft(draftKey, lesson.id, lesson.questions.length, legacyDraftKey), [draftKey, legacyDraftKey, lesson.id, lesson.questions.length]);
+  const initialDraft = useMemo(
+    () =>
+      typeof window === "undefined"
+        ? null
+        : readDraft(draftKey, lesson.id, lesson.questions.length, legacyDraftKey),
+    [draftKey, legacyDraftKey, lesson.id, lesson.questions.length],
+  );
   const [step, setStep] = useState(initialDraft?.step ?? 0);
   const [helpUsed, setHelpUsed] = useState(initialDraft?.helpUsed ?? false);
   const [answers, setAnswers] = useState<string[]>(initialDraft?.answers ?? []);
   const [startedAt] = useState(initialDraft?.startedAt ?? new Date().toISOString());
   const [selected, setSelected] = useState<string | null>(initialDraft?.selected ?? null);
+  const [stepAttempts, setStepAttempts] = useState<number[]>(
+    initialDraft?.stepAttempts ?? new Array(lesson.questions.length).fill(0),
+  );
+  const [wrongAttempts, setWrongAttempts] = useState(0);
   const [showHint, setShowHint] = useState(false);
   const [message, setMessage] = useState("");
-  const question = lesson.questions[step];
-  const correct = selected === question.answer;
+
+  const question = lesson.questions[step] ?? lesson.questions[0];
+  const isTemplateActivity = Boolean(lesson.template && lesson.template !== "multiple_choice");
+  const isStepCorrect = selected !== null && (selected === question?.answer || (isTemplateActivity && Boolean(selected)));
 
   useEffect(() => {
-    window.localStorage.setItem(draftKey, JSON.stringify({ lessonId: lesson.id, step, helpUsed, startedAt, answers, selected } satisfies Draft));
-  }, [answers, draftKey, helpUsed, lesson.id, selected, startedAt, step]);
+    window.localStorage.setItem(
+      draftKey,
+      JSON.stringify({
+        lessonId: lesson.id,
+        step,
+        helpUsed,
+        startedAt,
+        answers,
+        selected,
+        stepAttempts,
+      } satisfies Draft),
+    );
+  }, [answers, draftKey, helpUsed, lesson.id, selected, startedAt, step, stepAttempts]);
 
   function choose(choice: string) {
     if (selected === question.answer) return;
@@ -40,10 +79,40 @@ export function LessonPlayer({ lesson, childId, audioEnabled, onExit, onComplete
       next[step] = choice;
       return next;
     });
+
+    setStepAttempts((current) => {
+      const next = [...current];
+      next[step] = (next[step] ?? 0) + 1;
+      return next;
+    });
+
     if (choice === question.answer) {
       setMessage("أحسنت الانتباه. خلّينا نكمل للمثال التالي.");
     } else {
+      setWrongAttempts((prev) => prev + 1);
       setMessage("قريب! جرّب مرة ثانية، وخذ وقتك.");
+    }
+  }
+
+  function handleTemplateAttempt(isCorrect: boolean, attempts: number, answerValue: string) {
+    setStepAttempts((current) => {
+      const next = [...current];
+      next[step] = (next[step] ?? 0) + 1;
+      return next;
+    });
+
+    setAnswers((current) => {
+      const next = [...current];
+      next[step] = answerValue;
+      return next;
+    });
+
+    if (isCorrect) {
+      setSelected(answerValue);
+      setMessage("أحسنت الإنجاز! خطوة موفقة ومتقنة.");
+    } else {
+      setWrongAttempts(attempts);
+      setMessage("قريب! جرّب مرة ثانية على راحتك.");
     }
   }
 
@@ -53,28 +122,53 @@ export function LessonPlayer({ lesson, childId, audioEnabled, onExit, onComplete
       setSelected(null);
       setMessage("");
       setShowHint(false);
+      setWrongAttempts(0);
       return;
     }
     window.localStorage.removeItem(draftKey);
-    onComplete({ helpUsed, startedAt, answers });
+    onComplete({
+      helpUsed,
+      startedAt,
+      completedAt: new Date().toISOString(),
+      answers,
+      stepAttempts,
+    });
   }
 
   function readPrompt() {
     if (!audioEnabled || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(`${question.prompt}. ${question.choices.join(". ")}`);
+    const promptText = question?.prompt ?? lesson.title;
+    const choicesText = question?.choices && question.choices.length > 0 ? question.choices.join(". ") : "";
+    const utterance = new SpeechSynthesisUtterance(choicesText ? `${promptText}. ${choicesText}` : promptText);
     utterance.lang = "ar";
     utterance.rate = 0.82;
     window.speechSynthesis.speak(utterance);
+  }
+
+  const scaffoldHint = question ? resolveScaffoldHint(question, wrongAttempts) : "لاحظ المثال بهدوء، ثم جرّب على راحتك.";
+
+  function handleExit() {
+    const hasInteracted =
+      step > 0 ||
+      answers.some((a) => Boolean(a)) ||
+      wrongAttempts > 0 ||
+      selected !== null ||
+      stepAttempts.some((c) => c > 0);
+    onExit(hasInteracted);
   }
 
   return (
     <div className="lesson-scrim">
       <section className="lesson-panel" aria-label={lesson.title}>
         <header className="lesson-topbar">
-          <button className="icon-button lesson-exit" type="button" onClick={onExit} aria-label="الخروج من النشاط"><X size={22} /></button>
+          <button className="icon-button lesson-exit" type="button" onClick={handleExit} aria-label="الخروج من النشاط">
+            <X size={22} />
+          </button>
           <div className="lesson-progress" aria-label={`الخطوة ${step + 1} من ${lesson.questions.length}`}>
-            {lesson.questions.map((item, index) => <span key={item.prompt} className={index <= step ? "active" : ""} />)}
+            {lesson.questions.map((item, index) => (
+              <span key={`${item.prompt}-${index}`} className={index <= step ? "active" : ""} />
+            ))}
           </div>
           <span className="lesson-step-label">{step + 1} / {lesson.questions.length}</span>
         </header>
@@ -82,49 +176,46 @@ export function LessonPlayer({ lesson, childId, audioEnabled, onExit, onComplete
         <div className="lesson-body">
           <div className={`lesson-symbol theme-${lesson.theme}`}>{lesson.icon}</div>
           <p className="eyebrow">محطة قصيرة · {lesson.title}</p>
-          <h2>{question.prompt}</h2>
-          {question.object && <div className="lesson-object" aria-label="مجموعة أشياء للعدّ">{question.object}</div>}
-          <button className="read-aloud" type="button" onClick={readPrompt} disabled={!audioEnabled}>
-            <Volume2 size={17} /> {audioEnabled ? "اسمع السؤال" : "الصوت مكتوم"}
-          </button>
 
-          <div className="answer-grid" role="group" aria-label="خيارات الإجابة">
-            {question.choices.map((choice) => {
-              const isSelected = selected === choice;
-              const isCorrectChoice = isSelected && choice === question.answer;
-              const isWrongChoice = isSelected && choice !== question.answer;
-              return (
-                <button
-                  key={choice}
-                  type="button"
-                  className={`answer-option${isCorrectChoice ? " answer-correct" : ""}${isWrongChoice ? " answer-wrong" : ""}`}
-                  onClick={() => choose(choice)}
-                  aria-pressed={isSelected}
-                >
-                  <span>{choice}</span>
-                  {isCorrectChoice && <Check size={18} />}
-                </button>
-              );
-            })}
-          </div>
+          <ActivityTemplateHost
+            activity={lesson}
+            step={step}
+            audioEnabled={audioEnabled}
+            selected={selected}
+            onSelectChoice={choose}
+            onReadPrompt={readPrompt}
+            onTemplateAttempt={handleTemplateAttempt}
+          />
 
           <button
             className={`hint-toggle${showHint ? " is-open" : ""}`}
             type="button"
-            onClick={() => { setShowHint((value) => !value); setHelpUsed(true); }}
+            onClick={() => {
+              setShowHint((value) => !value);
+              setHelpUsed(true);
+            }}
             aria-expanded={showHint}
           >
             <HelpCircle size={18} /> تلميح من فطين
           </button>
-          {showHint && <div className="hint-card"><span className="hint-dot">ف</span><p>{question.hint ?? "لاحظ المثال مرة أخرى، ثم جرّب على راحتك."}</p></div>}
+          {showHint && (
+            <div className="hint-card">
+              <span className="hint-dot">ف</span>
+              <p>{scaffoldHint}</p>
+            </div>
+          )}
 
           <div className={`lesson-feedback${message ? " has-message" : ""}`} aria-live="polite">
-            {message && <span className={correct ? "feedback-good" : "feedback-soft"}>{message}</span>}
-            {correct && <button className="button button-primary" type="button" onClick={advance}>{step + 1 < lesson.questions.length ? "المثال التالي" : "إنهاء المحطة"}<ArrowRight size={17} /></button>}
+            {message && <span className={isStepCorrect ? "feedback-good" : "feedback-soft"}>{message}</span>}
+            {isStepCorrect && (
+              <button className="button button-primary" type="button" onClick={advance}>
+                {step + 1 < lesson.questions.length ? "المثال التالي" : "إنهاء المحطة"}
+                <ArrowRight size={17} />
+              </button>
+            )}
           </div>
         </div>
       </section>
-
     </div>
   );
 }
