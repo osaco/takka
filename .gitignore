@@ -5,3 +5,8 @@
 node_modules/
 dist/
 .system_generated/
+
+# Local AI/workbuddy workspace + tool artifacts (never uploaded)
+.workbuddy-ai/
+.playwright-mcp/
+.tmp_art/
