@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="192" height="192" role="img" aria-label="تكة">
+  <title>تكة</title>
+  <rect width="192" height="192" rx="42" fill="#286253"/>
+  <!-- «تكة»: لمسة على سطح الماء تُحدث دائرة -->
+  <circle cx="96" cy="96" r="52" fill="none" stroke="#F5F1E6" stroke-width="6" opacity="0.35"/>
+  <circle cx="96" cy="96" r="34" fill="none" stroke="#F5F1E6" stroke-width="6" opacity="0.6"/>
+  <circle cx="96" cy="96" r="15" fill="#F59E0B"/>
+  <path d="M96 34 v18 M96 140 v18 M34 96 h18 M140 96 h18" stroke="#E99B54" stroke-width="7" stroke-linecap="round"/>
+  <path d="M60 60 l12 12 M120 60 l-12 12" stroke="#7BAF8B" stroke-width="6" stroke-linecap="round" opacity="0.8"/>
+</svg>

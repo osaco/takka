@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="بطة">
+  <title>بَطَّة</title>
+  <ellipse cx="62" cy="78" rx="38" ry="26" fill="#F3C969" stroke="#173F38" stroke-width="3"/>
+  <circle cx="38" cy="42" r="20" fill="#F3C969" stroke="#173F38" stroke-width="3"/>
+  <path d="M16 42 h-10 a10 10 0 0 0 10 10 z" fill="#E99B54" stroke="#173F38" stroke-width="3" stroke-linejoin="round"/>
+  <circle cx="44" cy="38" r="3.5" fill="#173F38"/>
+  <path d="M92 88 q10 -4 8 -14 q-10 2 -12 12 z" fill="#286253" stroke="#173F38" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M30 82 q10 12 26 14" fill="none" stroke="#E0A94A" stroke-width="4" stroke-linecap="round"/>
+</svg>

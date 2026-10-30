@@ -1,38 +1,40 @@
 {
-  "name": "takka-web",
-  "version": "0.1.0",
+  "name": "takka",
   "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "تكة — محرك إتقان تعليمي عربي يعمل دون إنترنت، لأطفال غزة (الصف الأول).",
   "scripts": {
-    "dev": "next dev --hostname 127.0.0.1",
-    "build": "next build",
-    "start": "next start --hostname 127.0.0.1",
-    "lint": "eslint .",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
-    "content:validate": "node --no-warnings --experimental-strip-types scripts/validate-content.ts",
-    "test:content": "node --no-warnings --experimental-strip-types --test lib/core/content-validator.test.ts",
-    "test:templates": "node --no-warnings --experimental-strip-types --test lib/core/templates.test.ts",
-    "test": "npm run test:content && npm run test:templates",
-    "test:e2e": "playwright test"
+    "validate": "tsx tools/validate-packs.ts",
+    "coverage": "tsx tools/coverage.ts",
+    "check": "npm run typecheck && npm run test && npm run validate"
   },
   "dependencies": {
-    "@fontsource/tajawal": "5.3.0",
-    "@supabase/ssr": "0.12.7",
-    "@supabase/supabase-js": "2.118.0",
-    "lucide-react": "1.61.0",
-    "next": "16.4.3",
-    "react": "19.3.1",
-    "react-dom": "19.3.1",
-    "resend": "6.34.1",
-    "zod": "4.6.7"
+    "dexie": "^4.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zod": "^3.25.76",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
-    "@next/env": "16.4.3",
-    "@playwright/test": "1.64.1",
-    "@types/node": "26.6.5",
-    "@types/react": "19.3.0",
-    "@types/react-dom": "19.3.0",
-    "eslint": "9.39.5",
-    "eslint-config-next": "16.4.3",
-    "typescript": "5.9.3"
+    "@types/node": "^24.7.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.1",
+    "@vitejs/plugin-react": "^5.0.4",
+    "@vitest/coverage-v8": "^3.2.4",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3",
+    "vite": "^7.1.9",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20.19"
   }
 }

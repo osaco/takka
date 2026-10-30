@@ -1,0 +1,606 @@
+{
+  "manifest": {
+    "id": "g1-ar-v1.0",
+    "grade": 1,
+    "subject": "arabic",
+    "version": "0.1.0",
+    "title": "الصف الأول — لغتنا الجميلة",
+    "edition": "رزم غزة 2024",
+    "publishedAt": "2026-10-20",
+    "auditStatus": "internal_reviewed",
+    "scopeNote": "عيّنة تأسيسية: أربعة حروف (ر، د، ب، م) من أصل 28 حرفاً في رزمة الصف الأول. ليست المنهاج الكامل ولا الفصلين كاملين.",
+    "coverage": {
+      "declared": "4 حروف × مهارات متدرجة = 8 مهارات، و8 أنشطة. الباقي (24 حرفاً + الكلمات + الجمل) خارج هذا الإصدار.",
+      "units": [
+        { "id": "u-ra", "title": "حرف الراء", "lessons": 1 },
+        { "id": "u-dal", "title": "حرف الدال", "lessons": 1 },
+        { "id": "u-ba", "title": "حرف الباء", "lessons": 1 },
+        { "id": "u-mim", "title": "حرف الميم", "lessons": 1 }
+      ]
+    }
+  },
+  "islands": [
+    {
+      "id": "island-letters",
+      "title": "جزيرة الحروف",
+      "subject": "arabic",
+      "description": "نسمع أول صوت في الكلمة، ثم نختار الصورة التي تبدأ به."
+    },
+    {
+      "id": "island-writing",
+      "title": "جزيرة الكتابة",
+      "subject": "arabic",
+      "description": "نرسم الحرف بإصبعنا على الرمل، من اليمين إلى اليسار."
+    },
+    {
+      "id": "island-words",
+      "title": "جزيرة الكلمات",
+      "subject": "arabic",
+      "description": "نقرأ الكلمة ونطابقها بصورتها."
+    }
+  ],
+  "skills": [
+    {
+      "id": "g1.ar.letter.ra.recognize",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-letters",
+      "title": "نميّز صوت الراء في أول الكلمة",
+      "prerequisites": [],
+      "order": 1,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الراء",
+        "edition": "رزم غزة 2024",
+        "note": "ترتيب غزة يبدأ بالراء؛ رقم الصفحة يُثبَّت بعد المراجعة البصرية."
+      }
+    },
+    {
+      "id": "g1.ar.letter.dal.recognize",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-letters",
+      "title": "نميّز صوت الدال في أول الكلمة",
+      "prerequisites": ["g1.ar.letter.ra.recognize"],
+      "order": 2,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الدال",
+        "edition": "رزم غزة 2024",
+        "note": "رقم الصفحة يُثبَّت بعد المراجعة البصرية."
+      }
+    },
+    {
+      "id": "g1.ar.letter.ba.recognize",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-letters",
+      "title": "نميّز صوت الباء في أول الكلمة",
+      "prerequisites": ["g1.ar.letter.dal.recognize"],
+      "order": 3,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الباء",
+        "edition": "رزم غزة 2024",
+        "note": "رقم الصفحة يُثبَّت بعد المراجعة البصرية."
+      }
+    },
+    {
+      "id": "g1.ar.letter.mim.recognize",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-letters",
+      "title": "نميّز صوت الميم في أول الكلمة",
+      "prerequisites": ["g1.ar.letter.ba.recognize"],
+      "order": 4,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الميم",
+        "edition": "رزم غزة 2024",
+        "note": "رقم الصفحة يُثبَّت بعد المراجعة البصرية."
+      }
+    },
+    {
+      "id": "g1.ar.letter.ra.write",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-writing",
+      "title": "نرسم حرف الراء باتجاهه الصحيح",
+      "prerequisites": ["g1.ar.letter.ra.recognize"],
+      "order": 1,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الراء — الكتابة",
+        "edition": "رزم غزة 2024",
+        "note": "المسار تقريبي؛ يُضبط على شكل الحرف في الكتاب بعد المراجعة."
+      }
+    },
+    {
+      "id": "g1.ar.letter.ba.write",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-writing",
+      "title": "نرسم حرف الباء باتجاهه الصحيح",
+      "prerequisites": ["g1.ar.letter.ba.recognize"],
+      "order": 2,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الباء — الكتابة",
+        "edition": "رزم غزة 2024",
+        "note": "المسار تقريبي؛ يُضبط على شكل الحرف في الكتاب بعد المراجعة."
+      }
+    },
+    {
+      "id": "g1.ar.word.ra.read",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-words",
+      "title": "نقرأ كلمات تبدأ بالراء",
+      "prerequisites": ["g1.ar.letter.ra.recognize"],
+      "order": 1,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الراء — الكلمات",
+        "edition": "رزم غزة 2024",
+        "note": "الكلمات مشكولة كاملة؛ تُراجع مقابل الكتاب."
+      }
+    },
+    {
+      "id": "g1.ar.word.ba.read",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-words",
+      "title": "نقرأ كلمات تبدأ بالباء",
+      "prerequisites": ["g1.ar.letter.ba.recognize"],
+      "order": 2,
+      "sourceRef": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الباء — الكلمات",
+        "edition": "رزم غزة 2024",
+        "note": "الكلمات مشكولة كاملة؛ تُراجع مقابل الكتاب."
+      }
+    }
+  ],
+  "activities": [
+    {
+      "id": "g1.ar.ra.listen.01",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-letters",
+      "skillId": "g1.ar.letter.ra.recognize",
+      "template": "listen_identify",
+      "title": "أي كلمة تبدأ بصوت الراء؟",
+      "difficulty": 1,
+      "scaffolding": {
+        "level": 1,
+        "hint": "قل «رُ» وامدد الصوت، ثم ابحث عن الصورة التي تبدأ به."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الراء",
+        "edition": "رزم غزة 2024",
+        "note": "الصفحة تُثبَّت بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "نعم! رُمَّان تبدأ بصوت الراء.",
+        "retry": "قريب. قل «رُ» بهدوء، ثم انظر إلى أول صورة."
+      },
+      "config": {
+        "prompt": "أي كلمة تبدأ بصوت «ر»؟",
+        "spokenText": "رُ",
+        "options": [
+          {
+            "id": "a",
+            "label": "رُمَّان",
+            "image": "svg/ar/rumman.svg",
+            "alt": "رمانة حمراء بفم مفتوح",
+            "correct": true
+          },
+          {
+            "id": "b",
+            "label": "دَار",
+            "image": "svg/ar/dar.svg",
+            "alt": "بيت صغير بسقف مثلث",
+            "correct": false
+          },
+          {
+            "id": "c",
+            "label": "بَاب",
+            "image": "svg/ar/bab.svg",
+            "alt": "باب خشبي بقوس",
+            "correct": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "g1.ar.dal.listen.01",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-letters",
+      "skillId": "g1.ar.letter.dal.recognize",
+      "template": "listen_identify",
+      "title": "أي كلمة تبدأ بصوت الدال؟",
+      "difficulty": 1,
+      "scaffolding": {
+        "level": 1,
+        "hint": "قل «دُ» وضع لسانك خلف أسنانك، ثم ابحث عن الصورة."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الدال",
+        "edition": "رزم غزة 2024",
+        "note": "الصفحة تُثبَّت بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "أحسنت! دَار تبدأ بصوت الدال.",
+        "retry": "قريب. جرّب صوت «دُ» مرة أخرى."
+      },
+      "config": {
+        "prompt": "أي كلمة تبدأ بصوت «د»؟",
+        "spokenText": "دُ",
+        "options": [
+          {
+            "id": "a",
+            "label": "رُمَّان",
+            "image": "svg/ar/rumman.svg",
+            "alt": "رمانة حمراء",
+            "correct": false
+          },
+          {
+            "id": "b",
+            "label": "دَار",
+            "image": "svg/ar/dar.svg",
+            "alt": "بيت صغير بسقف مثلث",
+            "correct": true
+          },
+          {
+            "id": "c",
+            "label": "مِفْتَاح",
+            "image": "svg/ar/miftah.svg",
+            "alt": "مفتاح ذهبي",
+            "correct": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "g1.ar.ba.listen.01",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-letters",
+      "skillId": "g1.ar.letter.ba.recognize",
+      "template": "listen_identify",
+      "title": "أي كلمة تبدأ بصوت الباء؟",
+      "difficulty": 1,
+      "scaffolding": {
+        "level": 1,
+        "hint": "اقرأ «بُ» واجعل شفتيك تلتقيان، ثم اختر الصورة."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الباء",
+        "edition": "رزم غزة 2024",
+        "note": "الصفحة تُثبَّت بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "نعم! بَاب تبدأ بصوت الباء.",
+        "retry": "قريب. جرّب «بُ» مرة أخرى وانظر إلى الباب."
+      },
+      "config": {
+        "prompt": "أي كلمة تبدأ بصوت «ب»؟",
+        "spokenText": "بُ",
+        "options": [
+          {
+            "id": "a",
+            "label": "بَاب",
+            "image": "svg/ar/bab.svg",
+            "alt": "باب خشبي بقوس",
+            "correct": true
+          },
+          {
+            "id": "b",
+            "label": "دَار",
+            "image": "svg/ar/dar.svg",
+            "alt": "بيت صغير بسقف مثلث",
+            "correct": false
+          },
+          {
+            "id": "c",
+            "label": "رِيشَة",
+            "image": "svg/ar/rishah.svg",
+            "alt": "ريشة ناعمة",
+            "correct": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "g1.ar.mim.listen.01",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-letters",
+      "skillId": "g1.ar.letter.mim.recognize",
+      "template": "listen_identify",
+      "title": "أي كلمة تبدأ بصوت الميم؟",
+      "difficulty": 1,
+      "scaffolding": {
+        "level": 1,
+        "hint": "أغلق شفتيك وقل «مُ»، ثم ابحث عن الصورة التي تبدأ به."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الميم",
+        "edition": "رزم غزة 2024",
+        "note": "الصفحة تُثبَّت بعد المراجعة البصرية."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "أحسنت! مِفْتَاح تبدأ بصوت الميم.",
+        "retry": "قريب. قل «مُ» بهدوء ثم جرّب."
+      },
+      "config": {
+        "prompt": "أي كلمة تبدأ بصوت «م»؟",
+        "spokenText": "مُ",
+        "options": [
+          {
+            "id": "a",
+            "label": "مِفْتَاح",
+            "image": "svg/ar/miftah.svg",
+            "alt": "مفتاح ذهبي",
+            "correct": true
+          },
+          {
+            "id": "b",
+            "label": "بَاب",
+            "image": "svg/ar/bab.svg",
+            "alt": "باب خشبي",
+            "correct": false
+          },
+          {
+            "id": "c",
+            "label": "رُمَّان",
+            "image": "svg/ar/rumman.svg",
+            "alt": "رمانة حمراء",
+            "correct": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "g1.ar.ra.write.01",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-writing",
+      "skillId": "g1.ar.letter.ra.write",
+      "template": "trace_path",
+      "title": "تتبّع حرف الراء",
+      "difficulty": 1,
+      "scaffolding": {
+        "level": 1,
+        "hint": "نبدأ من اليمين، ننزل قليلاً ثم نلتف بلطف إلى اليسار."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الراء — الكتابة",
+        "edition": "رزم غزة 2024",
+        "note": "المسار تقريبي ويحتاج ضبطاً بصرياً."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "رسمت الراء بإصبعك. أعدها مرة أخرى بهدوء.",
+        "retry": "قريب. ابدأ من النقطة الذهبية واتبع الخط الرمادي."
+      },
+      "config": {
+        "prompt": "اتبع الخط الذهبي بإصبعك من اليمين إلى اليسار.",
+        "character": "ر",
+        "strokePath": "M 158 58 C 158 104 136 140 86 152",
+        "minCoverage": 0.7,
+        "tolerance": 30,
+        "showGuide": true
+      }
+    },
+    {
+      "id": "g1.ar.ba.write.01",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-writing",
+      "skillId": "g1.ar.letter.ba.write",
+      "template": "trace_path",
+      "title": "تتبّع حرف الباء",
+      "difficulty": 2,
+      "scaffolding": {
+        "level": 1,
+        "hint": "نبدأ من اليمين، نرسم قارباً صغيراً، ثم نضع النقطة تحته."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الباء — الكتابة",
+        "edition": "رزم غزة 2024",
+        "note": "المسار تقريبي ويحتاج ضبطاً بصرياً."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "هذا شكل الباء. النقطة تأتي في النهاية.",
+        "retry": "قريب. ابدأ من اليمين واتبع القوس."
+      },
+      "config": {
+        "prompt": "اتبع الخط الذهبي: قوس من اليمين، ثم نقطة تحت.",
+        "character": "ب",
+        "strokePath": "M 60 104 C 76 86 112 82 146 94 C 160 116 144 142 108 148 C 86 150 66 140 58 122",
+        "minCoverage": 0.7,
+        "tolerance": 30,
+        "showGuide": true
+      }
+    },
+    {
+      "id": "g1.ar.ra.drag.01",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-words",
+      "skillId": "g1.ar.word.ra.read",
+      "template": "drag_match",
+      "title": "نطابق كلمة الراء بصورتها",
+      "difficulty": 2,
+      "scaffolding": {
+        "level": 1,
+        "hint": "اقرأ الكلمة بصوت خفيف، ثم ابحث عن صورتها."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الراء — الكلمات",
+        "edition": "رزم غزة 2024",
+        "note": "الكلمات مشكولة كاملة."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "طابقت الكلمة بصورتها. قراءة موفقة.",
+        "retry": "قريب. اقرأ أول حرف ثم ابحث عن الصورة."
+      },
+      "config": {
+        "prompt": "اسحب الكلمة إلى صورتها.",
+        "shuffleTargets": true,
+        "pairs": [
+          {
+            "id": "p1",
+            "draggable": { "id": "d1", "label": "رُمَّان" },
+            "target": {
+              "id": "t1",
+              "label": "صورة ١",
+              "image": "svg/ar/rumman.svg",
+              "alt": "رمانة حمراء"
+            }
+          },
+          {
+            "id": "p2",
+            "draggable": { "id": "d2", "label": "رِيشَة" },
+            "target": {
+              "id": "t2",
+              "label": "صورة ٢",
+              "image": "svg/ar/rishah.svg",
+              "alt": "ريشة ناعمة"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "g1.ar.ba.drag.01",
+      "grade": 1,
+      "subject": "arabic",
+      "islandId": "island-words",
+      "skillId": "g1.ar.word.ba.read",
+      "template": "drag_match",
+      "title": "نطابق كلمة الباء بصورتها",
+      "difficulty": 2,
+      "scaffolding": {
+        "level": 1,
+        "hint": "اقرأ الكلمة، ثم انظر إلى أول حرف فيها."
+      },
+      "source": {
+        "kind": "pack",
+        "file": "لغتنا الجميلة ١ متمازجة غزة.pdf",
+        "unit": "حرف الباء — الكلمات",
+        "edition": "رزم غزة 2024",
+        "note": "الكلمات مشكولة كاملة."
+      },
+      "audit": {
+        "status": "internal_reviewed",
+        "reviewedAt": "2026-10-20",
+        "reviewer": "فريق تكة — مراجعة أولية",
+        "notes": "فحص آلي كامل؛ يلزم توقيع مختص تربوي قبل النشر العام."
+      },
+      "audio": { "optional": true },
+      "feedback": {
+        "success": "نعم! بَاب وبَطَّة تبدآن بالباء.",
+        "retry": "قريب. اقرأ أول حرف في الكلمة."
+      },
+      "config": {
+        "prompt": "اسحب الكلمة إلى صورتها.",
+        "shuffleTargets": true,
+        "pairs": [
+          {
+            "id": "p1",
+            "draggable": { "id": "d1", "label": "بَاب" },
+            "target": {
+              "id": "t1",
+              "label": "صورة ١",
+              "image": "svg/ar/bab.svg",
+              "alt": "باب خشبي"
+            }
+          },
+          {
+            "id": "p2",
+            "draggable": { "id": "d2", "label": "بَطَّة" },
+            "target": {
+              "id": "t2",
+              "label": "صورة ٢",
+              "image": "svg/ar/bata.svg",
+              "alt": "بطة صفراء"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

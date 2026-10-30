@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="ريشة">
+  <title>رِيشَة</title>
+  <path d="M34 102 C 40 66 62 34 98 18 C 104 58 84 92 46 100 Z" fill="#F8FAFC" stroke="#173F38" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M98 18 C 76 46 58 72 46 100" fill="none" stroke="#173F38" stroke-width="3" stroke-linecap="round"/>
+  <path d="M74 40 l16 4 M64 54 l18 5 M54 70 l18 6" fill="none" stroke="#D4DCC8" stroke-width="3" stroke-linecap="round"/>
+  <path d="M98 18 q-10 4 -14 12 q10 -2 14 -12 z" fill="#F59E0B"/>
+  <path d="M34 102 l-6 8" stroke="#173F38" stroke-width="3" stroke-linecap="round"/>
+</svg>

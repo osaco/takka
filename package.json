@@ -1,0 +1,11 @@
+{
+  "name": "takka-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix التطبيق run dev",
+    "build": "npm --prefix التطبيق run build",
+    "preview": "npm --prefix التطبيق run preview",
+    "test": "npm --prefix التطبيق run test",
+    "check": "npm --prefix التطبيق run check"
+  }
+}
